@@ -28,46 +28,41 @@ module.exports = async (req, res) => {
     }
 
     // 1. Notification Email to CJ
+    const escapeHtml = (value) => value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeMessage = escapeHtml(message);
+
     const notifyPayload = JSON.stringify({
-        from: {
-            email: FROM_EMAIL,
-            name: "Portfolio Inquiry System"
-        },
-        to: [
-            {
-                email: "waletcharlesjames3@gmail.com",
-                name: "CHARLES JAMES WALET"
-            }
-        ],
+        from: FROM_EMAIL,
+        to: "waletcharlesjames3@gmail.com",
         subject: `New Portfolio Message from ${name}`,
         plain: `You received a new message from your portfolio contact form:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
         html: `<div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b; background: #f8fafc; border-radius: 8px;">
             <h2 style="color: #0265dc;">New Portfolio Contact Message</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p><strong>Name:</strong> ${safeName}</p>
+            <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
             <hr style="border: none; border-top: 1px solid #cbd5e1; margin: 20px 0;">
             <p><strong>Message:</strong></p>
-            <p style="white-space: pre-wrap; background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">${message}</p>
+            <p style="white-space: pre-wrap; background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">${safeMessage}</p>
         </div>`
     });
 
     // 2. Personalized Auto-Reply to Visitor
     const autoReplyPayload = JSON.stringify({
-        from: {
-            email: FROM_EMAIL,
-            name: "CHARLES JAMES “CJ” J. WALET"
-        },
-        to: [
-            {
-                email: email,
-                name: name
-            }
-        ],
+        from: FROM_EMAIL,
+        to: email,
         subject: `Thank you for contacting Charles James Walet`,
         plain: `Hi ${name},\n\nThank you for reaching out to me about your concerns!\n\nI have received your message and I will be replying/emailing back to you within the next 24 hours.\n\nBest regards,\nCHARLES JAMES “CJ” J. WALET\n4th Year BSIT Student & IT Technician Intern\nQuezon City University`,
         html: `<div style="font-family: Arial, sans-serif; padding: 25px; color: #1e293b; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; max-width: 600px;">
             <h2 style="color: #0265dc; margin-top: 0;">Thank You for Reaching Out</h2>
-            <p>Hi <strong>${name}</strong>,</p>
+            <p>Hi <strong>${safeName}</strong>,</p>
             <p>Thank you for reaching out to me about your concerns!</p>
             <p>I have received your message and I will be replying/emailing back to you within the next <strong>24 hours</strong>.</p>
             <br>
@@ -84,7 +79,7 @@ module.exports = async (req, res) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Maileroo-Key': API_KEY,
+                    'X-API-Key': API_KEY,
                     'Content-Length': Buffer.byteLength(payload)
                 }
             };
@@ -95,7 +90,7 @@ module.exports = async (req, res) => {
                     if (response.statusCode >= 200 && response.statusCode < 300) {
                         resolve(data);
                     } else {
-                        reject(new Error(`Maileroo returned status ${response.statusCode}.`));
+                        reject(new Error(`Maileroo returned status ${response.statusCode}: ${data.slice(0, 500)}`));
                     }
                 });
             });
@@ -117,6 +112,7 @@ module.exports = async (req, res) => {
 
         return res.status(200).json({ success: true, message: 'Message sent successfully.' });
     } catch (error) {
+        console.error('Maileroo delivery failed:', error);
         return res.status(500).json({ error: 'Failed to dispatch email via Maileroo API.' });
     }
 };
