@@ -41,16 +41,37 @@ function buildCalendar(contributions, fromDate, toDate) {
 }
 
 async function getPublicContributionData(fromDate, toDate) {
-    const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${USERNAME}?y=last`, {
-        headers: { 'User-Agent': 'CJ-Walet-Portfolio' }
-    });
-    if (!response.ok) throw new Error(`Public contribution API HTTP ${response.status}`);
-    const body = await response.json();
+    const [calendarResponse, repositoriesResponse] = await Promise.all([
+        fetch(`https://github-contributions-api.jogruber.de/v4/${USERNAME}?y=last`, {
+            headers: { 'User-Agent': 'CJ-Walet-Portfolio' }
+        }),
+        fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&type=owner&sort=updated`, {
+            headers: {
+                'Accept': 'application/vnd.github+json',
+                'User-Agent': 'CJ-Walet-Portfolio'
+            }
+        })
+    ]);
+    if (!calendarResponse.ok) throw new Error(`Public contribution API HTTP ${calendarResponse.status}`);
+    if (!repositoriesResponse.ok) throw new Error(`GitHub repositories API HTTP ${repositoriesResponse.status}`);
+
+    const body = await calendarResponse.json();
+    const repositories = await repositoriesResponse.json();
     const contributions = Array.isArray(body.contributions)
         ? body.contributions.filter(day => day.date >= fromDate && day.date <= toDate)
         : [];
     if (!contributions.length) throw new Error('Public contribution API returned no calendar data.');
-    return buildCalendar(contributions, fromDate, toDate);
+
+    const languages = [...new Set(repositories
+        .map(repository => repository.language)
+        .filter(Boolean))]
+        .slice(0, 3);
+
+    return {
+        ...buildCalendar(contributions, fromDate, toDate),
+        repositoryCount: repositories.length,
+        languages
+    };
 }
 
 module.exports = async (req, res) => {

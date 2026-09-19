@@ -145,7 +145,7 @@ If the form shows **Unable to Send**:
 
 ## Step 6: Configure live GitHub contributions
 
-The GitHub contribution calendar uses the serverless route `api/github-contributions.js` with a fixed Sep 1, 2025–Sep 19, 2026 range and loads once without date advancement. It displays a visible error if the route or data source fails. Add a GitHub fine-grained personal access token as `GITHUB_TOKEN` in Vercel for private contribution access; if it is absent, the route uses a public contribution calendar fallback. Keep the token secret; it is never sent to the browser.
+The GitHub contribution calendar uses the serverless route `api/github-contributions.js` with a fixed Sep 1, 2025–Sep 19, 2026 range and loads once without date advancement. It displays a visible error if the route or data source fails. Add a GitHub fine-grained personal access token as `GITHUB_TOKEN` in Vercel for private contribution access; if it is absent, the route uses public contribution and repository APIs so the calendar, repository count, and primary languages still render. Keep the token secret; it is never sent to the browser.
 
 The token should have permission to read the user profile and contribution data. After adding it, redeploy so the route can request the previous 12 months from GitHub dynamically.
 

@@ -142,7 +142,7 @@ GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 
 Do not commit API keys, SMTP passwords, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.
 
-`GITHUB_TOKEN` is used by the serverless contribution route when available so private contributions can be aggregated without exposing a token in the browser. If it is not configured, the route falls back to the public contribution calendar API so the calendar still renders. The GitHub section uses a fixed Sep 1, 2025–Sep 19, 2026 range and loads once without advancing the date.
+`GITHUB_TOKEN` is used by the serverless contribution route when available so private contributions can be aggregated without exposing a token in the browser. If it is not configured, the route falls back to the public contribution calendar and public repositories APIs, so the calendar, repository count, and primary languages still render. The GitHub section uses a fixed Sep 1, 2025–Sep 19, 2026 range and loads once without advancing the date.
 
 Transactional email markup lives in `api/emailTemplates/`. Both messages use standalone table-based HTML with inline styles and a plain-text alternative for Gmail, Outlook, and mobile clients.
 
