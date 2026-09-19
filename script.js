@@ -51,6 +51,7 @@ function initGitHubContributions() {
     const title = document.getElementById('gh-contrib-title');
     const summary = document.getElementById('gh-contrib-summary');
     const months = document.getElementById('gh-months-bar');
+    const footnote = document.getElementById('gh-contrib-footnote');
     const languages = document.getElementById('gh-languages');
     const repositories = document.getElementById('gh-repository-count');
     if (!section || !grid || !title || !summary) return;
@@ -91,7 +92,8 @@ function initGitHubContributions() {
             week.contributionDays.forEach((day) => {
                 const cell = document.createElement('span');
                 cell.className = 'gh-contribution-cell';
-                cell.style.setProperty('--contribution-color', day.color);
+                const level = day.contributionCount === 0 ? 0 : day.contributionCount < 2 ? 1 : day.contributionCount < 4 ? 2 : day.contributionCount < 7 ? 3 : 4;
+                cell.dataset.level = level;
                 cell.title = `${day.contributionCount} contribution${day.contributionCount === 1 ? '' : 's'} on ${day.date}`;
                 cell.setAttribute('aria-label', cell.title);
                 column.appendChild(cell);
@@ -99,6 +101,7 @@ function initGitHubContributions() {
             grid.appendChild(column);
         });
         title.textContent = `${data.totalContributions.toLocaleString()} contributions in the last year`;
+        if (footnote) footnote.innerHTML = `<strong>cjw21332</strong> has contributed ${data.totalContributions.toLocaleString()} contributions in the last year on GitHub.`;
         displayedToDate = data.toDate || data.to?.slice(0, 10) || null;
         summary.textContent = `${formatDate(data.fromDate || data.from)} – ${formatDate(data.toDate || data.to)} · Updated just now`;
         if (months) {
