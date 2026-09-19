@@ -1,10 +1,13 @@
 const USERNAME = 'cjw21332';
 
 function getDateRange() {
-    const to = new Date();
-    const from = new Date(to);
-    from.setFullYear(from.getFullYear() - 1);
-    return { from: from.toISOString(), to: to.toISOString() };
+    const now = new Date();
+    const to = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59));
+    const from = new Date(Date.UTC(now.getUTCFullYear() - 1, now.getUTCMonth(), now.getUTCDate()));
+    return {
+        from: from.toISOString(),
+        to: to.toISOString()
+    };
 }
 
 module.exports = async (req, res) => {
@@ -73,13 +76,21 @@ module.exports = async (req, res) => {
             .map(([name]) => name);
 
         res.setHeader('Cache-Control', 's-maxage=1200, stale-while-revalidate=1200');
+        const calendar = body.data.user.contributionsCollection.contributionCalendar;
+        const today = to.slice(0, 10);
+        const visibleWeeks = calendar.weeks.map(week => ({
+            ...week,
+            contributionDays: week.contributionDays.filter(day => day.date <= today)
+        })).filter(week => week.contributionDays.length > 0);
+
         return res.status(200).json({
             username: USERNAME,
             from,
             to,
             repositoryCount: repositories.totalCount,
             languages,
-            ...body.data.user.contributionsCollection.contributionCalendar
+            totalContributions: calendar.totalContributions,
+            weeks: visibleWeeks
         });
     } catch (error) {
         console.error('[GitHub] Contribution request failed:', error);

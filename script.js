@@ -113,6 +113,9 @@ function initGitHubContributions() {
         console.warn('[GitHub] Unable to load contribution data:', error);
         title.textContent = 'Unable to load contribution data';
         summary.textContent = 'GitHub data unavailable';
+        if (months) months.replaceChildren(Object.assign(document.createElement('span'), {
+            textContent: 'Date range unavailable'
+        }));
         if (languages) languages.textContent = 'Unavailable';
         if (repositories) repositories.textContent = 'Unavailable';
         setMessage('Unable to load contribution data.');
