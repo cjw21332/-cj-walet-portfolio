@@ -64,7 +64,7 @@ function initGitHubContributions() {
         month: 'short',
         day: 'numeric',
         year: 'numeric'
-    }).format(new Date(value));
+    }).format(new Date(`${value.slice(0, 10)}T00:00:00`));
 
     const setMessage = (message) => {
         grid.innerHTML = `<p class="gh-data-message">${message} <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer">View GitHub profile</a>.</p>`;
@@ -86,10 +86,10 @@ function initGitHubContributions() {
             grid.appendChild(column);
         });
         title.textContent = `${data.totalContributions.toLocaleString()} contributions in the last year`;
-        summary.textContent = `${formatDate(data.from)} – ${formatDate(data.to)} · Updated just now`;
+        summary.textContent = `${formatDate(data.fromDate || data.from)} – ${formatDate(data.toDate || data.to)} · Updated just now`;
         if (months) {
-            const start = new Date(data.from);
-            const end = new Date(data.to);
+            const start = new Date(`${(data.fromDate || data.from).slice(0, 10)}T00:00:00`);
+            const end = new Date(`${(data.toDate || data.to).slice(0, 10)}T00:00:00`);
             const labels = [];
             const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
             while (cursor <= end) {

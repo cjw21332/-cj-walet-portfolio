@@ -1,12 +1,25 @@
 const USERNAME = 'cjw21332';
 
 function getDateRange() {
-    const now = new Date();
-    const to = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59));
-    const from = new Date(Date.UTC(now.getUTCFullYear() - 1, now.getUTCMonth(), now.getUTCDate()));
+    const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Manila',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+    const parts = Object.fromEntries(dateFormatter.formatToParts(new Date())
+        .filter(({ type }) => type !== 'literal')
+        .map(({ type, value }) => [type, value]));
+    const endDate = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day) - 1));
+    const startDate = new Date(endDate);
+    startDate.setUTCFullYear(startDate.getUTCFullYear() - 1);
+    const toDate = endDate.toISOString().slice(0, 10);
+    const fromDate = startDate.toISOString().slice(0, 10);
     return {
-        from: from.toISOString(),
-        to: to.toISOString()
+        from: `${fromDate}T00:00:00Z`,
+        to: `${toDate}T23:59:59Z`,
+        fromDate,
+        toDate
     };
 }
 
@@ -22,7 +35,7 @@ module.exports = async (req, res) => {
     }
     console.info('[GitHub] Loading contribution data for cjw21332.');
 
-    const { from, to } = getDateRange();
+    const { from, to, fromDate, toDate } = getDateRange();
     const query = `query($login:String!, $from:DateTime!, $to:DateTime!) {
         user(login:$login) {
             repositories(first:100, ownerAffiliations:OWNER, isFork:false) {
@@ -77,16 +90,17 @@ module.exports = async (req, res) => {
 
         res.setHeader('Cache-Control', 's-maxage=1200, stale-while-revalidate=1200');
         const calendar = body.data.user.contributionsCollection.contributionCalendar;
-        const today = to.slice(0, 10);
         const visibleWeeks = calendar.weeks.map(week => ({
             ...week,
-            contributionDays: week.contributionDays.filter(day => day.date <= today)
+            contributionDays: week.contributionDays.filter(day => day.date <= toDate)
         })).filter(week => week.contributionDays.length > 0);
 
         return res.status(200).json({
             username: USERNAME,
             from,
             to,
+            fromDate,
+            toDate,
             repositoryCount: repositories.totalCount,
             languages,
             totalContributions: calendar.totalContributions,
