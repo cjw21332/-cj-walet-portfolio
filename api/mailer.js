@@ -147,6 +147,7 @@ async function sendMail(mail) {
             }
         });
         await command(socket, 'QUIT', [221]);
+        return true;
     } finally {
         socket.end();
     }
