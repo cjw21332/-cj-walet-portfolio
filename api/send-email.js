@@ -65,6 +65,9 @@ module.exports = async (req, res) => {
                 display_name: "CHARLES JAMES WALET"
             }
         ],
+        reply_to: {
+            address: email
+        },
         subject: `New portfolio inquiry from ${emailSubjectName}`,
         plain: `CJ Walet | IT Portfolio\nNew contact form inquiry\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\n---\n${portfolioName}\n${portfolioRole}\n${portfolioUrl}`,
         html: `<div style="max-width: 680px; margin: 0 auto; background: #ffffff; border: 1px solid #dbeafe; border-radius: 12px; overflow: hidden;">

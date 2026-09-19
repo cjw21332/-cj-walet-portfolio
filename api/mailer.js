@@ -20,6 +20,10 @@ function getDisplayName(address) {
     return address && typeof address === 'object' ? address.display_name : '';
 }
 
+function escapeHeader(value) {
+    return String(value || '').replace(/[\r\n"]/g, '');
+}
+
 function logSmtpConfiguration(from) {
     const username = process.env.SMTP_USERNAME;
     const password = process.env.SMTP_PASSWORD;
@@ -75,17 +79,26 @@ function createMessage(mail) {
     const fromName = getDisplayName(mail.from);
     const to = getAddress(mail.to[0]);
     const toName = getDisplayName(mail.to[0]);
+    const replyTo = mail.reply_to ? getAddress(mail.reply_to) : '';
     const boundary = `portfolio-${Date.now()}`;
     const encodedSubject = `=?UTF-8?B?${Buffer.from(mail.subject).toString('base64')}?=`;
     const htmlPart = Buffer.from(mail.html).toString('base64').match(/.{1,76}/g).join('\r\n');
     const plainPart = Buffer.from(mail.plain).toString('base64').match(/.{1,76}/g).join('\r\n');
 
-    return [
-        `From: ${fromName ? `"${fromName}" ` : ''}<${from}>`,
-        `To: ${toName ? `"${toName}" ` : ''}<${to}>`,
+    const headers = [
+        `From: ${fromName ? `"${escapeHeader(fromName)}" ` : ''}<${escapeHeader(from)}>`,
+        `To: ${toName ? `"${escapeHeader(toName)}" ` : ''}<${escapeHeader(to)}>`,
         `Subject: ${encodedSubject}`,
+        replyTo ? `Reply-To: <${escapeHeader(replyTo)}>` : '',
+        `Date: ${new Date().toUTCString()}`,
+        `Message-ID: <${Date.now()}.${Math.random().toString(16).slice(2)}@${SMTP_HOST}>`,
+        'X-Mailer: CJ Walet IT Portfolio Contact Service',
         'MIME-Version: 1.0',
-        `Content-Type: multipart/alternative; boundary="${boundary}"`,
+        `Content-Type: multipart/alternative; boundary="${boundary}"`
+    ].filter(Boolean).join('\r\n');
+
+    return [
+        headers,
         '',
         `--${boundary}`,
         'Content-Type: text/plain; charset=UTF-8',
