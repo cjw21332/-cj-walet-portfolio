@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSkills();
     initMobileNav();
     initPortalTooltips();
+    initGitHubContributions();
 });
 
     // Add to DOMContentLoaded
@@ -44,6 +45,58 @@ function initThemeToggle() {
         } else {
             icon.className = 'fas fa-moon';
             icon.style.color = '';
+        }
+
+        function initGitHubContributions() {
+            const grid = document.getElementById('gh-contribution-grid');
+            const title = document.getElementById('gh-contrib-title');
+            const summary = document.getElementById('gh-contrib-summary');
+            if (!grid || !title || !summary) return;
+
+            const formatDate = (value) => new Intl.DateTimeFormat(undefined, {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            }).format(new Date(value));
+
+            const render = (calendar) => {
+                grid.replaceChildren();
+                calendar.weeks.forEach((week) => {
+                    const column = document.createElement('div');
+                    column.className = 'gh-contribution-week';
+                    week.contributionDays.forEach((day) => {
+                        const cell = document.createElement('span');
+                        cell.className = 'gh-contribution-cell';
+                        cell.style.setProperty('--contribution-color', day.color);
+                        cell.title = `${day.contributionCount} contribution${day.contributionCount === 1 ? '' : 's'} on ${day.date}`;
+                        cell.setAttribute('aria-label', cell.title);
+                        column.appendChild(cell);
+                    });
+                    grid.appendChild(column);
+                });
+                title.textContent = `${calendar.totalContributions.toLocaleString()} contributions in the last year`;
+                summary.textContent = `${formatDate(calendar.from)} – ${formatDate(calendar.to)}`;
+            };
+
+            const fallback = () => {
+                const now = new Date();
+                const previous = new Date(now);
+                previous.setFullYear(now.getFullYear() - 1);
+                summary.textContent = `${formatDate(previous)} – ${formatDate(now)}`;
+                title.textContent = 'GitHub contributions in the last year';
+                grid.innerHTML = '<p class="gh-data-message">Live contribution data is temporarily unavailable. <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer">View GitHub profile</a>.</p>';
+            };
+
+            const load = () => fetch('/api/github-contributions')
+                .then(response => {
+                    if (!response.ok) throw new Error('GitHub contribution request failed');
+                    return response.json();
+                })
+                .then(render)
+                .catch(fallback);
+
+            load();
+            window.setInterval(load, 60 * 60 * 1000);
         }
     }
 }

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CJ Walet | IT Student &amp; Aspiring Full Stack Developer</title>
-    <!-- Simple CJ Favicon Data URI -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20' font-family='monospace' fill='%230077ff'%3E<CJ/%3E%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="assets/cj-logo.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,7 +22,7 @@
 
     <header class="navbar">
         <div class="logo magnetic-element">
-            <span class="bracket">&lt;</span><span class="logo-text">CJ</span><span class="slash">/</span><span class="bracket">&gt;</span>
+            <img src="assets/cj-logo.svg" alt="CJ Walet logo">
         </div>
         <nav class="nav-links">
             <a href="#about" class="nav-item">/about</a>
@@ -367,8 +366,8 @@
 
                 <div class="github-chart-box">
                     <div class="gh-chart-title">
-                        <h4><i class="fas fa-calendar-alt"></i> 25 contributions in the last year (Public &amp; Private)</h4>
-                        <span class="gh-contrib-summary">Sep 14, 2025 – Sep 19, 2026</span>
+                        <h4><i class="fas fa-calendar-alt"></i> <span id="gh-contrib-title">Contributions in the last year</span></h4>
+                        <span class="gh-contrib-summary" id="gh-contrib-summary">Updating date range…</span>
                     </div>
 
                     <div class="gh-months-bar">
@@ -388,11 +387,11 @@
                     </div>
 
                     <div class="gh-graph-wrapper">
-                        <img src="https://ghchart.rshah.org/0077ff/cjw21332" alt="cjw21332's GitHub Contribution Chart (25 contributions in the last year)" class="gh-chart-img" onerror="this.onerror=null; this.src='https://github-readme-stats.vercel.app/api?username=cjw21332&amp;show_icons=true&amp;theme=algolia';">
+                        <div class="gh-contribution-grid" id="gh-contribution-grid" aria-label="GitHub contribution calendar"></div>
                     </div>
 
                     <div class="gh-chart-legend-row">
-                        <span class="gh-contrib-footnote"><strong>cjw21332</strong>'s public &amp; private repository contributions aggregated live.</span>
+                        <span class="gh-contrib-footnote"><strong>cjw21332</strong>'s contribution calendar updates hourly.</span>
                         <div class="gh-legend-scale">
                             <span>Less</span>
                             <span class="sq sq-0" title="No contributions"></span>
@@ -735,6 +734,7 @@
         <div class="footer-content">
             <div class="footer-main">
                 <div class="footer-intro">
+                    <img src="assets/cj-logo.svg" alt="CJ Walet logo" class="footer-logo">
                     <span class="footer-kicker">CHARLES JAMES “CJ” J. WALET</span>
                     <h2>Building thoughtful software<br>for real people.</h2>
                     <a href="mailto:waletcharlesjames3@gmail.com" class="footer-email">

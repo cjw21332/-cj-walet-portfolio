@@ -92,6 +92,9 @@ Portfolio/
 ├── api/
 │   ├── send-email.js          Serverless contact-form email handler
 │   └── mailer.js              Maileroo SMTP delivery helper
+│   ├── github-contributions.js Live GitHub contribution API route
+├── assets/
+│   └── cj-logo.svg            Reusable CJ portfolio logo and favicon
 ├── certifications/            Certificate PDF documents
 ├── professional pic.png       Profile image
 ├── concentrix.jpg             Internship company logo
@@ -131,9 +134,12 @@ SMTP_PORT=465
 SMTP_USERNAME=your_maileroo_smtp_username
 SMTP_PASSWORD=your_maileroo_smtp_password
 MAILEROO_FROM_EMAIL=your_maileroo_smtp_username
+GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 ```
 
 Do not commit API keys, SMTP passwords, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.
+
+`GITHUB_TOKEN` is used only by the serverless contribution route so private contributions can be aggregated without exposing a token in the browser. The GitHub section refreshes hourly and calculates the previous 12 months from the current date.
 
 ## Interactive Terminal Commands
 

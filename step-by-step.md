@@ -107,6 +107,7 @@ SMTP_PORT=465
 SMTP_USERNAME=your_maileroo_smtp_username
 SMTP_PASSWORD=your_maileroo_smtp_password
 MAILEROO_FROM_EMAIL=your_maileroo_smtp_username
+GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 ```
 
 Use the SMTP account email and password from Maileroo. Keep `SMTP_PASSWORD` secret and never place it in frontend code or repository files. `MAILEROO_FROM_EMAIL` should match the SMTP account email.
@@ -137,7 +138,13 @@ If the form shows **Unable to Send**:
 5. Redeploy after changing environment variables.
 6. Read the server logs for the full Maileroo status code, response body, redacted request metadata, API-key presence check, and sender-domain check.
 
-## Step 6: Add a custom domain
+## Step 6: Configure live GitHub contributions
+
+The GitHub contribution calendar uses the serverless route `api/github-contributions.js` and refreshes every hour. Add a GitHub fine-grained personal access token as `GITHUB_TOKEN` in Vercel. Keep it secret; it is never sent to the browser.
+
+The token should have permission to read the user profile and contribution data. After adding it, redeploy so the route can request the previous 12 months from GitHub dynamically.
+
+## Step 7: Add a custom domain
 
 1. Purchase an available domain such as `cjwalet.dev`.
 2. In Vercel, open **Settings → Domains**.

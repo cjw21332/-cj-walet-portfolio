@@ -180,6 +180,12 @@ body::-webkit-scrollbar-thumb:hover {
     flex-shrink: 0;
 }
 
+.logo img {
+    width: 112px;
+    height: auto;
+    display: block;
+}
+
 .logo .bracket { color: var(--accent-electric); }
 .logo .slash { color: var(--accent-blue); }
 .logo .logo-text { color: var(--text-main); letter-spacing: 1px; }
@@ -1065,11 +1071,47 @@ main {
 .sq-3 { background: rgba(0, 119, 255, 0.8); }
 .sq-4 { background: #0077ff; }
 
-.gh-chart-img {
-    width: 100%;
+.gh-contribution-grid {
+    display: flex;
+    gap: 4px;
     min-width: 650px;
+    padding: 0.5rem 0.2rem;
+}
+
+.gh-contribution-week {
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.gh-contribution-cell {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--contribution-color, rgba(0, 119, 255, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: transform 160ms ease, filter 160ms ease;
+}
+
+.gh-contribution-cell:hover {
+    transform: scale(1.35);
+    filter: brightness(1.25);
+    z-index: 1;
+}
+
+.gh-data-message {
+    color: var(--text-muted);
+    padding: 1rem 0;
+}
+
+.gh-data-message a {
+    color: var(--accent-blue);
+}
+
+.footer-logo {
+    width: 132px;
     height: auto;
-    display: block;
+    margin-bottom: 1rem;
 }
 
 @media (max-width: 992px) {
