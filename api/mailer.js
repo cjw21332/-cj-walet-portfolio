@@ -1,6 +1,14 @@
-const MAILEROO_ENDPOINT = 'https://smtp.maileroo.com/send';
+const MAILEROO_ENDPOINT = 'https://smtp.maileroo.com/api/v2/emails';
 
 function redactAddress(address) {
+    if (Array.isArray(address)) {
+        return address.map(redactAddress);
+    }
+
+    if (address && typeof address === 'object') {
+        address = address.address;
+    }
+
     if (!address || typeof address !== 'string') return '[missing]';
     const atIndex = address.lastIndexOf('@');
     if (atIndex <= 0) return '[invalid email]';
@@ -11,6 +19,14 @@ function redactAddress(address) {
 }
 
 function getAddressDomain(address) {
+    if (Array.isArray(address)) {
+        return getAddressDomain(address[0]);
+    }
+
+    if (address && typeof address === 'object') {
+        address = address.address;
+    }
+
     if (!address || typeof address !== 'string') return '';
     const atIndex = address.lastIndexOf('@');
     return atIndex > 0 ? address.slice(atIndex + 1).toLowerCase() : '';
@@ -81,19 +97,13 @@ async function sendMail({ apiKey, ...mail }) {
         throw new Error('MAILEROO_API_KEY is not configured.');
     }
 
-    const formData = new FormData();
-    Object.entries(mail).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') {
-            formData.append(key, String(value));
-        }
-    });
-
     const response = await fetch(MAILEROO_ENDPOINT, {
         method: 'POST',
         headers: {
-            'X-API-Key': apiKey
+            'X-API-Key': apiKey,
+            'Content-Type': 'application/json'
         },
-        body: formData
+        body: JSON.stringify(mail)
     });
 
     const body = await response.text();

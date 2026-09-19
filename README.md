@@ -91,7 +91,7 @@ Portfolio/
 ├── script.js                  UI behavior, skills data, terminal, forms, and animations
 ├── api/
 │   ├── send-email.js          Serverless contact-form email handler
-│   └── mailer.js              Maileroo API delivery helper
+│   └── mailer.js              Maileroo Email API v2 delivery helper
 ├── certifications/            Certificate PDF documents
 ├── professional pic.png       Profile image
 ├── concentrix.jpg             Internship company logo

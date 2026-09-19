@@ -40,8 +40,16 @@ module.exports = async (req, res) => {
     const safeMessage = escapeHtml(message);
 
     const notifyPayload = {
-        from: FROM_EMAIL,
-        to: "waletcharlesjames3@gmail.com",
+        from: {
+            address: FROM_EMAIL,
+            display_name: "Portfolio Inquiry System"
+        },
+        to: [
+            {
+                address: "waletcharlesjames3@gmail.com",
+                display_name: "CHARLES JAMES WALET"
+            }
+        ],
         subject: `New Portfolio Message from ${name}`,
         plain: `You received a new message from your portfolio contact form:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
         html: `<div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b; background: #f8fafc; border-radius: 8px;">
@@ -56,8 +64,16 @@ module.exports = async (req, res) => {
 
     // 2. Personalized Auto-Reply to Visitor
     const autoReplyPayload = {
-        from: FROM_EMAIL,
-        to: email,
+        from: {
+            address: FROM_EMAIL,
+            display_name: "CHARLES JAMES “CJ” J. WALET"
+        },
+        to: [
+            {
+                address: email,
+                display_name: name
+            }
+        ],
         subject: `Thank you for contacting Charles James Walet`,
         plain: `Hi ${name},\n\nThank you for reaching out to me about your concerns!\n\nI have received your message and I will be replying/emailing back to you within the next 24 hours.\n\nBest regards,\nCHARLES JAMES “CJ” J. WALET\n4th Year BSIT Student & IT Technician Intern\nQuezon City University`,
         html: `<div style="font-family: Arial, sans-serif; padding: 25px; color: #1e293b; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; max-width: 600px;">
