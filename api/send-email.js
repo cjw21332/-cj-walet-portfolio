@@ -20,10 +20,9 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'Name, Email, and Message are required.' });
     }
 
-    const API_KEY = process.env.MAILEROO_API_KEY;
     const FROM_EMAIL = process.env.MAILEROO_FROM_EMAIL;
 
-    if (!API_KEY || !FROM_EMAIL) {
+    if (!FROM_EMAIL) {
         return res.status(500).json({ error: 'Mail service is not configured.' });
     }
 
@@ -89,8 +88,8 @@ module.exports = async (req, res) => {
 
     try {
         const results = await Promise.all([
-            sendMail({ apiKey: API_KEY, ...notifyPayload }),
-            sendMail({ apiKey: API_KEY, ...autoReplyPayload })
+            sendMail(notifyPayload),
+            sendMail(autoReplyPayload)
         ]);
 
         if (results.some(result => !result)) {

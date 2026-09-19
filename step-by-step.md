@@ -25,7 +25,7 @@ This project contains:
 - A static portfolio frontend in `index.html`, `styles.css`, and `script.js`
 - Images and PDF certificates
 - A serverless contact endpoint at `api/send-email.js`
-- A Maileroo Email API v2 delivery helper at `api/mailer.js`
+- A Maileroo SMTP delivery helper at `api/mailer.js`
 - A Maileroo integration that sends the portfolio notification and visitor auto-reply
 
 Use a host that supports serverless functions. **Vercel is the recommended option** because it supports this repository layout directly.
@@ -97,24 +97,25 @@ Replace `YOUR_USERNAME` with your GitHub username.
 
 5. Deploy once. The static portfolio should load, but configure the mail variables before testing the form.
 
-## Step 4: Configure Maileroo secrets in Vercel
+## Step 4: Configure Maileroo SMTP secrets in Vercel
 
 In the Vercel project, open **Settings → Environment Variables** and add these variables for **Production**, **Preview**, and **Development**:
 
 ```text
-MAILEROO_API_KEY=the_rotated_maileroo_api_key
-MAILEROO_FROM_EMAIL=the_verified_maileroo_sender_address
-MAILEROO_VERIFIED_DOMAIN=your-verified-domain.example
+SMTP_HOST=smtp.maileroo.com
+SMTP_PORT=465
+SMTP_USERNAME=your_maileroo_smtp_username
+SMTP_PASSWORD=your_maileroo_smtp_password
+MAILEROO_FROM_EMAIL=your_maileroo_smtp_username
 ```
 
-The sender address must be verified in Maileroo. Do not use a visitor's email address as the `from` address.
-`MAILEROO_VERIFIED_DOMAIN` is optional, but when configured it lets the server log confirm that the sender address belongs to the expected verified domain.
+Use the SMTP account email and password from Maileroo. Keep `SMTP_PASSWORD` secret and never place it in frontend code or repository files. `MAILEROO_FROM_EMAIL` should match the SMTP account email.
 
 After saving the variables:
 
 1. Open **Deployments**.
 2. Redeploy the latest deployment.
-3. Do not place either value in `env.js` or frontend JavaScript.
+3. Do not place any SMTP value in `env.js` or frontend JavaScript.
 
 ## Step 5: Verify the contact form
 
@@ -130,9 +131,9 @@ Test the deployed URL:
 If the form shows **Unable to Send**:
 
 1. Open the Vercel deployment logs.
-2. Check that `MAILEROO_API_KEY` and `MAILEROO_FROM_EMAIL` are present in the deployment environment.
-3. Confirm the Maileroo sender is verified.
-4. Confirm the rotated key is active.
+2. Check that `SMTP_USERNAME`, `SMTP_PASSWORD`, and `MAILEROO_FROM_EMAIL` are present in the deployment environment.
+3. Confirm the SMTP account is active in Maileroo.
+4. Confirm `MAILEROO_FROM_EMAIL` matches the SMTP account email.
 5. Redeploy after changing environment variables.
 6. Read the server logs for the full Maileroo status code, response body, redacted request metadata, API-key presence check, and sender-domain check.
 

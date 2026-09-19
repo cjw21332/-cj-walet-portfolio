@@ -91,7 +91,7 @@ Portfolio/
 ├── script.js                  UI behavior, skills data, terminal, forms, and animations
 ├── api/
 │   ├── send-email.js          Serverless contact-form email handler
-│   └── mailer.js              Maileroo Email API v2 delivery helper
+│   └── mailer.js              Maileroo SMTP delivery helper
 ├── certifications/            Certificate PDF documents
 ├── professional pic.png       Profile image
 ├── concentrix.jpg             Internship company logo
@@ -123,11 +123,14 @@ The contact handler uses Maileroo to send:
 1. A notification to CJ when a visitor submits the form.
 2. An automatic acknowledgement to the visitor.
 
-Configure Maileroo credentials through server-side environment variables before deployment. The frontend does not receive these values:
+Configure the Maileroo SMTP account through server-side environment variables before deployment. The frontend does not receive these values:
 
 ```text
-MAILEROO_API_KEY=your_maileroo_api_key
-MAILEROO_FROM_EMAIL=verified_sender@example.com
+SMTP_HOST=smtp.maileroo.com
+SMTP_PORT=465
+SMTP_USERNAME=your_maileroo_smtp_username
+SMTP_PASSWORD=your_maileroo_smtp_password
+MAILEROO_FROM_EMAIL=your_maileroo_smtp_username
 ```
 
 Do not commit API keys, SMTP passwords, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.

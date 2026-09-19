@@ -1,123 +1,155 @@
-const MAILEROO_ENDPOINT = 'https://smtp.maileroo.com/api/v2/emails';
+const tls = require('tls');
+
+const SMTP_HOST = process.env.SMTP_HOST || 'smtp.maileroo.com';
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 
 function redactAddress(address) {
-    if (Array.isArray(address)) {
-        return address.map(redactAddress);
-    }
-
-    if (address && typeof address === 'object') {
-        address = address.address;
-    }
-
-    if (!address || typeof address !== 'string') return '[missing]';
-    const atIndex = address.lastIndexOf('@');
+    const value = address && typeof address === 'object' ? address.address : address;
+    if (!value || typeof value !== 'string') return '[missing]';
+    const atIndex = value.lastIndexOf('@');
     if (atIndex <= 0) return '[invalid email]';
-
-    const localPart = address.slice(0, atIndex);
-    const domain = address.slice(atIndex + 1);
-    return `${localPart.slice(0, 2)}${'*'.repeat(Math.max(1, localPart.length - 2))}@${domain}`;
+    const localPart = value.slice(0, atIndex);
+    return `${localPart.slice(0, 2)}${'*'.repeat(Math.max(1, localPart.length - 2))}${value.slice(atIndex)}`;
 }
 
-function getAddressDomain(address) {
-    if (Array.isArray(address)) {
-        return getAddressDomain(address[0]);
-    }
-
-    if (address && typeof address === 'object') {
-        address = address.address;
-    }
-
-    if (!address || typeof address !== 'string') return '';
-    const atIndex = address.lastIndexOf('@');
-    return atIndex > 0 ? address.slice(atIndex + 1).toLowerCase() : '';
+function getAddress(address) {
+    return address && typeof address === 'object' ? address.address : address;
 }
 
-function logMailerooConfiguration(apiKey, from) {
-    const keyIsString = typeof apiKey === 'string';
-    const keyIsPresent = keyIsString && apiKey.trim().length > 0;
-    const fromDomain = getAddressDomain(from);
-    const configuredVerifiedDomain = process.env.MAILEROO_VERIFIED_DOMAIN?.trim().toLowerCase() || '';
-    const domainMatchesConfiguredValue = Boolean(
-        configuredVerifiedDomain && fromDomain === configuredVerifiedDomain
-    );
+function getDisplayName(address) {
+    return address && typeof address === 'object' ? address.display_name : '';
+}
 
-    console.info('[Maileroo] Environment check:', {
-        apiKeyDefined: apiKey !== undefined,
-        apiKeyType: typeof apiKey,
-        apiKeyPresent: keyIsPresent,
-        apiKeyLength: keyIsString ? apiKey.length : 0,
-        fromAddress: redactAddress(from),
-        fromDomain: fromDomain || '[missing]',
-        configuredVerifiedDomain: configuredVerifiedDomain || '[not configured]',
-        domainMatchesConfiguredValue
+function logSmtpConfiguration(from) {
+    const username = process.env.SMTP_USERNAME;
+    const password = process.env.SMTP_PASSWORD;
+
+    console.info('[Maileroo SMTP] Environment check:', {
+        host: SMTP_HOST,
+        port: SMTP_PORT,
+        usernameDefined: username !== undefined,
+        usernamePresent: typeof username === 'string' && username.trim().length > 0,
+        passwordDefined: password !== undefined,
+        passwordPresent: typeof password === 'string' && password.length > 0,
+        fromAddress: redactAddress(from)
+    });
+}
+
+function readResponse(socket) {
+    return new Promise((resolve, reject) => {
+        let data = '';
+
+        const onData = (chunk) => {
+            data += chunk.toString();
+            const lines = data.split('\r\n');
+            const lastCompleteLine = lines[lines.length - 2] || '';
+
+            if (/^\d{3} /.test(lastCompleteLine)) {
+                socket.removeListener('data', onData);
+                resolve({ code: Number(lastCompleteLine.slice(0, 3)), body: data.trim() });
+            }
+        };
+
+        socket.on('data', onData);
+        socket.once('error', reject);
+    });
+}
+
+async function command(socket, value, expectedCodes) {
+    socket.write(`${value}\r\n`);
+    const response = await readResponse(socket);
+
+    console.info('[Maileroo SMTP] Response:', {
+        command: value.split(' ')[0],
+        statusCode: response.code,
+        body: response.body
     });
 
-    if (!keyIsPresent) {
-        console.error('[Maileroo] MAILEROO_API_KEY is undefined or empty at request time.');
-    }
-
-    if (!fromDomain) {
-        console.error('[Maileroo] MAILEROO_FROM_EMAIL does not contain a valid email domain.');
-    } else if (configuredVerifiedDomain && !domainMatchesConfiguredValue) {
-        console.error('[Maileroo] Sender domain does not match MAILEROO_VERIFIED_DOMAIN.', {
-            fromDomain,
-            configuredVerifiedDomain
-        });
-    } else {
-        console.info(
-            '[Maileroo] Sender domain must be verified in Maileroo:',
-            fromDomain
-        );
+    if (!expectedCodes.includes(response.code)) {
+        throw new Error(`SMTP ${value.split(' ')[0]} failed with ${response.code}: ${response.body}`);
     }
 }
 
-function getMailerooError(status, body) {
-    let message = body;
+function createMessage(mail) {
+    const from = getAddress(mail.from);
+    const fromName = getDisplayName(mail.from);
+    const to = getAddress(mail.to[0]);
+    const toName = getDisplayName(mail.to[0]);
+    const boundary = `portfolio-${Date.now()}`;
+    const encodedSubject = `=?UTF-8?B?${Buffer.from(mail.subject).toString('base64')}?=`;
+    const htmlPart = Buffer.from(mail.html).toString('base64').match(/.{1,76}/g).join('\r\n');
+    const plainPart = Buffer.from(mail.plain).toString('base64').match(/.{1,76}/g).join('\r\n');
+
+    return [
+        `From: ${fromName ? `"${fromName}" ` : ''}<${from}>`,
+        `To: ${toName ? `"${toName}" ` : ''}<${to}>`,
+        `Subject: ${encodedSubject}`,
+        'MIME-Version: 1.0',
+        `Content-Type: multipart/alternative; boundary="${boundary}"`,
+        '',
+        `--${boundary}`,
+        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding: base64',
+        '',
+        plainPart,
+        `--${boundary}`,
+        'Content-Type: text/html; charset=UTF-8',
+        'Content-Transfer-Encoding: base64',
+        '',
+        htmlPart,
+        `--${boundary}--`,
+        ''
+    ].join('\r\n');
+}
+
+async function sendMail(mail) {
+    console.info('[Maileroo SMTP] Request payload metadata:', {
+        from: redactAddress(mail.from),
+        to: mail.to.map(redactAddress),
+        subject: mail.subject
+    });
+    logSmtpConfiguration(mail.from);
+
+    const username = process.env.SMTP_USERNAME;
+    const password = process.env.SMTP_PASSWORD;
+    if (!username || !password) {
+        throw new Error('SMTP_USERNAME and SMTP_PASSWORD must be configured.');
+    }
+
+    const socket = tls.connect({
+        host: SMTP_HOST,
+        port: SMTP_PORT,
+        servername: SMTP_HOST,
+        rejectUnauthorized: true
+    });
 
     try {
-        const parsed = JSON.parse(body);
-        message = parsed.message || parsed.error || body;
-    } catch {
-        // Maileroo may return plain text for an error response.
+        await readResponse(socket);
+        await command(socket, `EHLO ${SMTP_HOST}`, [250]);
+        await command(socket, 'AUTH LOGIN', [334]);
+        await command(socket, Buffer.from(username).toString('base64'), [334]);
+        await command(socket, Buffer.from(password).toString('base64'), [235]);
+        await command(socket, `MAIL FROM:<${getAddress(mail.from)}>`, [250]);
+
+        for (const recipient of mail.to) {
+            await command(socket, `RCPT TO:<${getAddress(recipient)}>`, [250, 251]);
+        }
+
+        await command(socket, 'DATA', [354]);
+        const message = createMessage(mail)
+            .split('\r\n')
+            .map(line => line.startsWith('.') ? `.${line}` : line)
+            .join('\r\n');
+        socket.write(`${message}\r\n.\r\n`);
+        await readResponse(socket).then((response) => {
+            if (response.code !== 250) {
+                throw new Error(`SMTP DATA failed with ${response.code}: ${response.body}`);
+            }
+        });
+        await command(socket, 'QUIT', [221]);
+    } finally {
+        socket.end();
     }
-
-    return new Error(`Maileroo returned ${status}: ${String(message).slice(0, 300)}`);
-}
-
-async function sendMail({ apiKey, ...mail }) {
-    console.info('[Maileroo] Request payload metadata:', {
-        from: redactAddress(mail.from),
-        to: redactAddress(mail.to),
-        subject: mail.subject || '[missing]'
-    });
-
-    logMailerooConfiguration(apiKey, mail.from);
-
-    if (!apiKey) {
-        throw new Error('MAILEROO_API_KEY is not configured.');
-    }
-
-    const response = await fetch(MAILEROO_ENDPOINT, {
-        method: 'POST',
-        headers: {
-            'X-API-Key': apiKey,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(mail)
-    });
-
-    const body = await response.text();
-    console.info('[Maileroo] Response:', {
-        statusCode: response.status,
-        statusText: response.statusText,
-        body
-    });
-
-    if (!response.ok) {
-        throw getMailerooError(response.status, body);
-    }
-
-    return body;
 }
 
 module.exports = { sendMail };
