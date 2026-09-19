@@ -16,10 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initGitHubContributions();
 });
 
-    // Add to DOMContentLoaded
-    initPortalTooltips();
-
-
 function initThemeToggle() {
     const toggleBtn = document.getElementById('theme-toggle');
     if (!toggleBtn) return;
@@ -46,59 +42,113 @@ function initThemeToggle() {
             icon.className = 'fas fa-moon';
             icon.style.color = '';
         }
-
-        function initGitHubContributions() {
-            const grid = document.getElementById('gh-contribution-grid');
-            const title = document.getElementById('gh-contrib-title');
-            const summary = document.getElementById('gh-contrib-summary');
-            if (!grid || !title || !summary) return;
-
-            const formatDate = (value) => new Intl.DateTimeFormat(undefined, {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric'
-            }).format(new Date(value));
-
-            const render = (calendar) => {
-                grid.replaceChildren();
-                calendar.weeks.forEach((week) => {
-                    const column = document.createElement('div');
-                    column.className = 'gh-contribution-week';
-                    week.contributionDays.forEach((day) => {
-                        const cell = document.createElement('span');
-                        cell.className = 'gh-contribution-cell';
-                        cell.style.setProperty('--contribution-color', day.color);
-                        cell.title = `${day.contributionCount} contribution${day.contributionCount === 1 ? '' : 's'} on ${day.date}`;
-                        cell.setAttribute('aria-label', cell.title);
-                        column.appendChild(cell);
-                    });
-                    grid.appendChild(column);
-                });
-                title.textContent = `${calendar.totalContributions.toLocaleString()} contributions in the last year`;
-                summary.textContent = `${formatDate(calendar.from)} – ${formatDate(calendar.to)}`;
-            };
-
-            const fallback = () => {
-                const now = new Date();
-                const previous = new Date(now);
-                previous.setFullYear(now.getFullYear() - 1);
-                summary.textContent = `${formatDate(previous)} – ${formatDate(now)}`;
-                title.textContent = 'GitHub contributions in the last year';
-                grid.innerHTML = '<p class="gh-data-message">Live contribution data is temporarily unavailable. <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer">View GitHub profile</a>.</p>';
-            };
-
-            const load = () => fetch('/api/github-contributions')
-                .then(response => {
-                    if (!response.ok) throw new Error('GitHub contribution request failed');
-                    return response.json();
-                })
-                .then(render)
-                .catch(fallback);
-
-            load();
-            window.setInterval(load, 60 * 60 * 1000);
-        }
     }
+}
+
+function initGitHubContributions() {
+    const section = document.getElementById('github-stats');
+    const grid = document.getElementById('gh-contribution-grid');
+    const title = document.getElementById('gh-contrib-title');
+    const summary = document.getElementById('gh-contrib-summary');
+    const months = document.getElementById('gh-months-bar');
+    const languages = document.getElementById('gh-languages');
+    const repositories = document.getElementById('gh-repository-count');
+    if (!section || !grid || !title || !summary) return;
+    if (section.dataset.githubPolling === 'true') return;
+    section.dataset.githubPolling = 'true';
+
+    const refreshInterval = 20 * 60 * 1000;
+    let requestController = null;
+
+    const formatDate = (value) => new Intl.DateTimeFormat(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    }).format(new Date(value));
+
+    const setMessage = (message) => {
+        grid.innerHTML = `<p class="gh-data-message">${message} <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer">View GitHub profile</a>.</p>`;
+    };
+
+    const render = (data) => {
+        grid.replaceChildren();
+        data.weeks.forEach((week) => {
+            const column = document.createElement('div');
+            column.className = 'gh-contribution-week';
+            week.contributionDays.forEach((day) => {
+                const cell = document.createElement('span');
+                cell.className = 'gh-contribution-cell';
+                cell.style.setProperty('--contribution-color', day.color);
+                cell.title = `${day.contributionCount} contribution${day.contributionCount === 1 ? '' : 's'} on ${day.date}`;
+                cell.setAttribute('aria-label', cell.title);
+                column.appendChild(cell);
+            });
+            grid.appendChild(column);
+        });
+        title.textContent = `${data.totalContributions.toLocaleString()} contributions in the last year`;
+        summary.textContent = `${formatDate(data.from)} – ${formatDate(data.to)} · Updated just now`;
+        if (months) {
+            const start = new Date(data.from);
+            const end = new Date(data.to);
+            const labels = [];
+            const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+            while (cursor <= end) {
+                labels.push(new Intl.DateTimeFormat(undefined, {
+                    month: 'short',
+                    year: cursor.getMonth() === 0 || cursor.getMonth() === start.getMonth() || cursor.getMonth() === end.getMonth() ? 'numeric' : undefined
+                }).format(cursor));
+                cursor.setMonth(cursor.getMonth() + 1);
+            }
+            months.replaceChildren(...labels.map(label => {
+                const element = document.createElement('span');
+                element.textContent = label;
+                return element;
+            }));
+        }
+        if (languages && data.languages?.length) languages.textContent = data.languages.join(', ');
+        if (repositories && Number.isInteger(data.repositoryCount)) repositories.textContent = data.repositoryCount.toLocaleString();
+    };
+
+    const fallback = (error) => {
+        console.warn('[GitHub] Unable to load contribution data:', error);
+        title.textContent = 'Unable to load contribution data';
+        summary.textContent = 'GitHub data unavailable';
+        if (languages) languages.textContent = 'Unavailable';
+        if (repositories) repositories.textContent = 'Unavailable';
+        setMessage('Unable to load contribution data.');
+    };
+
+    const load = async () => {
+        if (document.visibilityState === 'hidden') return;
+        requestController?.abort();
+        requestController = new AbortController();
+        summary.classList.add('gh-live-status');
+        try {
+            const response = await fetch(`/api/github-contributions?refresh=${Date.now()}`, {
+                signal: requestController.signal,
+                cache: 'no-store'
+            });
+            if (response.status === 403 || response.status === 429) {
+                console.warn('[GitHub] Contribution request was rate-limited.');
+            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            render(await response.json());
+        } catch (error) {
+            if (error.name !== 'AbortError') fallback(error);
+        } finally {
+            summary.classList.remove('gh-live-status');
+        }
+    };
+
+    const intervalId = window.setInterval(load, refreshInterval);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') load();
+    });
+    load();
+    window.addEventListener('pagehide', () => {
+        window.clearInterval(intervalId);
+        requestController?.abort();
+    }, { once: true });
 }
 
 function initCanvas() {

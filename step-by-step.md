@@ -145,7 +145,7 @@ If the form shows **Unable to Send**:
 
 ## Step 6: Configure live GitHub contributions
 
-The GitHub contribution calendar uses the serverless route `api/github-contributions.js` and refreshes every hour. Add a GitHub fine-grained personal access token as `GITHUB_TOKEN` in Vercel. Keep it secret; it is never sent to the browser.
+The GitHub contribution calendar uses the serverless route `api/github-contributions.js` and refreshes every 20 minutes while the page is visible. It pauses in background tabs and displays a visible error if the route or token fails. Add a GitHub fine-grained personal access token as `GITHUB_TOKEN` in Vercel. Keep it secret; it is never sent to the browser.
 
 The token should have permission to read the user profile and contribution data. After adding it, redeploy so the route can request the previous 12 months from GitHub dynamically.
 

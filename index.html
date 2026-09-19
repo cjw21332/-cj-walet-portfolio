@@ -344,7 +344,7 @@
                 <div class="github-metrics-grid">
                     <div class="gh-metric-card">
                         <span class="gh-metric-label">Primary Languages</span>
-                        <span class="gh-metric-val">HTML, JS, SQL</span>
+                        <span class="gh-metric-val" id="gh-languages">Loading…</span>
                         <div class="lang-progress-bar">
                             <div class="lang-seg seg-html" style="width: 45%" title="HTML"></div>
                             <div class="lang-seg seg-js" style="width: 35%" title="JavaScript"></div>
@@ -354,8 +354,8 @@
 
                     <div class="gh-metric-card">
                         <span class="gh-metric-label">Repositories</span>
-                        <span class="gh-metric-val">cjw21332</span>
-                        <p class="gh-subtext">Building web apps &amp; academic projects</p>
+                        <span class="gh-metric-val" id="gh-repository-count">Loading…</span>
+                        <p class="gh-subtext">Public repositories</p>
                     </div>
 
                     <div class="gh-metric-card">
@@ -368,23 +368,11 @@
                 <div class="github-chart-box">
                     <div class="gh-chart-title">
                         <h4><i class="fas fa-calendar-alt"></i> <span id="gh-contrib-title">Contributions in the last year</span></h4>
-                        <span class="gh-contrib-summary" id="gh-contrib-summary">Updating date range…</span>
+                        <span class="gh-contrib-summary" id="gh-contrib-summary">Loading contributions…</span>
                     </div>
 
-                    <div class="gh-months-bar">
-                        <span>Sep 2025</span>
-                        <span>Oct</span>
-                        <span>Nov</span>
-                        <span>Dec</span>
-                        <span>Jan 2026</span>
-                        <span>Feb</span>
-                        <span>Mar</span>
-                        <span>Apr</span>
-                        <span>May</span>
-                        <span>Jun</span>
-                        <span>Jul</span>
-                        <span>Aug</span>
-                        <span>Sep 2026</span>
+                    <div class="gh-months-bar" id="gh-months-bar" aria-hidden="true">
+                        <span>Loading date range…</span>
                     </div>
 
                     <div class="gh-graph-wrapper">
@@ -392,7 +380,7 @@
                     </div>
 
                     <div class="gh-chart-legend-row">
-                        <span class="gh-contrib-footnote"><strong>cjw21332</strong>'s contribution calendar updates hourly.</span>
+                        <span class="gh-contrib-footnote"><strong>cjw21332</strong>'s contribution calendar updates every 20 minutes.</span>
                         <div class="gh-legend-scale">
                             <span>Less</span>
                             <span class="sq sq-0" title="No contributions"></span>
