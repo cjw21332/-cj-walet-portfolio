@@ -184,6 +184,12 @@ body::-webkit-scrollbar-thumb:hover {
     width: 42px;
     height: 42px;
     display: block;
+    content: url("assets/cjw-logo-dark.svg");
+}
+
+[data-theme="light"] .logo img,
+[data-theme="light"] .footer-logo {
+    content: url("assets/cjw-logo-light.svg");
 }
 
 .logo .bracket { color: var(--accent-electric); }

@@ -91,10 +91,13 @@ Portfolio/
 ├── script.js                  UI behavior, skills data, terminal, forms, and animations
 ├── api/
 │   ├── send-email.js          Serverless contact-form email handler
-│   └── mailer.js              Maileroo SMTP delivery helper
+│   ├── mailer.js              Maileroo SMTP delivery helper
+│   └── emailTemplates/        Table-based notification and auto-reply templates
 │   ├── github-contributions.js Live GitHub contribution API route
 ├── assets/
-│   └── cj-logo.svg            Reusable CJ portfolio logo and favicon
+│   ├── cjw-logo-dark.svg      CJW logo for dark surfaces
+│   └── cjw-logo-light.svg     CJW logo for light surfaces
+├── favicon.ico                CJW favicon
 ├── certifications/            Certificate PDF documents
 ├── professional pic.png       Profile image
 ├── concentrix.jpg             Internship company logo
@@ -140,6 +143,8 @@ GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 Do not commit API keys, SMTP passwords, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.
 
 `GITHUB_TOKEN` is used only by the serverless contribution route so private contributions can be aggregated without exposing a token in the browser. The GitHub section refreshes hourly and calculates the previous 12 months from the current date.
+
+Transactional email markup lives in `api/emailTemplates/`. Both messages use standalone table-based HTML with inline styles and a plain-text alternative for Gmail, Outlook, and mobile clients.
 
 ## Interactive Terminal Commands
 

@@ -26,6 +26,7 @@ This project contains:
 - Images and PDF certificates
 - A serverless contact endpoint at `api/send-email.js`
 - A Maileroo SMTP delivery helper at `api/mailer.js`
+- Table-based reusable email templates in `api/emailTemplates/`
 - A Maileroo integration that sends the portfolio notification and visitor auto-reply
 
 Use a host that supports serverless functions. **Vercel is the recommended option** because it supports this repository layout directly.
@@ -52,6 +53,10 @@ The current frontend no longer sends mail directly and does not need a client-si
    script.js
    api/send-email.js
    api/mailer.js
+   api/emailTemplates/
+   assets/cjw-logo-dark.svg
+   assets/cjw-logo-light.svg
+   favicon.ico
    certifications/
    ```
 
