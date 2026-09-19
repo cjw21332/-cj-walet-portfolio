@@ -37,11 +37,27 @@ module.exports = async (req, res) => {
     const safeName = escapeHtml(name);
     const safeEmail = escapeHtml(email);
     const safeMessage = escapeHtml(message);
+    const portfolioName = 'CJ Walet | IT Portfolio';
+    const portfolioRole = 'IT Student & Aspiring Full-Stack Developer';
+    const portfolioUrl = 'https://charlesjameswalet-portfolio.vercel.app';
+    const emailSubjectName = name.replace(/[\r\n]+/g, ' ').trim();
+    const brandedHeader = `
+        <header style="padding: 28px 32px; background: linear-gradient(135deg, #06152d 0%, #0b2e5f 100%); color: #ffffff;">
+            <div style="font-family: Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; color: #22d3ee;">&lt; CJ /&gt;</div>
+            <div style="font-family: Arial, sans-serif; font-size: 22px; font-weight: 700; margin-top: 12px;">${portfolioName}</div>
+            <div style="font-family: Arial, sans-serif; font-size: 13px; color: #cbd5e1; margin-top: 6px;">${portfolioRole}</div>
+        </header>`;
+    const brandedFooter = `
+        <footer style="padding: 22px 32px; background: #f1f5f9; border-top: 1px solid #dbeafe; color: #64748b; font-family: Arial, sans-serif; font-size: 12px; line-height: 1.6;">
+            <strong style="color: #0f172a;">${portfolioName}</strong><br>
+            Quezon City, Philippines · <a href="${portfolioUrl}" style="color: #0369a1; text-decoration: none;">View portfolio</a><br>
+            This message was sent through the portfolio contact form.
+        </footer>`;
 
     const notifyPayload = {
         from: {
             address: FROM_EMAIL,
-            display_name: "Portfolio Inquiry System"
+            display_name: portfolioName
         },
         to: [
             {
@@ -49,15 +65,22 @@ module.exports = async (req, res) => {
                 display_name: "CHARLES JAMES WALET"
             }
         ],
-        subject: `New Portfolio Message from ${name}`,
-        plain: `You received a new message from your portfolio contact form:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-        html: `<div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b; background: #f8fafc; border-radius: 8px;">
-            <h2 style="color: #0265dc;">New Portfolio Contact Message</h2>
-            <p><strong>Name:</strong> ${safeName}</p>
-            <p><strong>Email:</strong> <a href="mailto:${safeEmail}">${safeEmail}</a></p>
-            <hr style="border: none; border-top: 1px solid #cbd5e1; margin: 20px 0;">
-            <p><strong>Message:</strong></p>
-            <p style="white-space: pre-wrap; background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">${safeMessage}</p>
+        subject: `New portfolio inquiry from ${emailSubjectName}`,
+        plain: `CJ Walet | IT Portfolio\nNew contact form inquiry\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\n---\n${portfolioName}\n${portfolioRole}\n${portfolioUrl}`,
+        html: `<div style="max-width: 680px; margin: 0 auto; background: #ffffff; border: 1px solid #dbeafe; border-radius: 12px; overflow: hidden;">
+            ${brandedHeader}
+            <main style="padding: 32px; color: #1e293b; font-family: Arial, sans-serif;">
+                <div style="display: inline-block; padding: 6px 10px; border-radius: 999px; background: #e0f2fe; color: #0369a1; font-size: 11px; font-weight: 700; letter-spacing: 1px;">NEW CONTACT INQUIRY</div>
+                <h1 style="font-size: 26px; margin: 18px 0 8px; color: #0f172a;">A new message arrived</h1>
+                <p style="margin: 0 0 24px; color: #64748b;">Someone has reached out through your IT portfolio.</p>
+                <div style="padding: 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <p style="margin: 0 0 10px;"><strong>Name:</strong> ${safeName}</p>
+                    <p style="margin: 0;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #0369a1;">${safeEmail}</a></p>
+                </div>
+                <h2 style="font-size: 16px; margin: 28px 0 10px; color: #0f172a;">Message</h2>
+                <p style="white-space: pre-wrap; margin: 0; padding: 18px; background: #ffffff; border-left: 4px solid #06b6d4; color: #334155; line-height: 1.7;">${safeMessage}</p>
+            </main>
+            ${brandedFooter}
         </div>`
     };
 
@@ -65,7 +88,7 @@ module.exports = async (req, res) => {
     const autoReplyPayload = {
         from: {
             address: FROM_EMAIL,
-            display_name: "CHARLES JAMES “CJ” J. WALET"
+            display_name: portfolioName
         },
         to: [
             {
@@ -73,16 +96,19 @@ module.exports = async (req, res) => {
                 display_name: name
             }
         ],
-        subject: `Thank you for contacting Charles James Walet`,
-        plain: `Hi ${name},\n\nThank you for reaching out to me about your concerns!\n\nI have received your message and I will be replying/emailing back to you within the next 24 hours.\n\nBest regards,\nCHARLES JAMES “CJ” J. WALET\n4th Year BSIT Student & IT Technician Intern\nQuezon City University`,
-        html: `<div style="font-family: Arial, sans-serif; padding: 25px; color: #1e293b; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; max-width: 600px;">
-            <h2 style="color: #0265dc; margin-top: 0;">Thank You for Reaching Out</h2>
-            <p>Hi <strong>${safeName}</strong>,</p>
-            <p>Thank you for reaching out to me about your concerns!</p>
-            <p>I have received your message and I will be replying/emailing back to you within the next <strong>24 hours</strong>.</p>
-            <br>
-            <p style="margin-bottom: 0;">Best regards,</p>
-            <p style="margin-top: 4px;"><strong>CHARLES JAMES “CJ” J. WALET</strong><br><span style="color: #64748b; font-size: 14px;">4th Year BSIT Student &amp; IT Technician Intern<br>Quezon City University</span></p>
+        subject: `Thank you for contacting ${portfolioName}`,
+        plain: `Hi ${name},\n\nThank you for contacting ${portfolioName}.\n\nYour message has been received successfully. I will review your inquiry and reply within the next 24 to 48 hours.\n\nBest regards,\nCJ Walet\n${portfolioRole}\nQuezon City, Philippines\n${portfolioUrl}`,
+        html: `<div style="max-width: 680px; margin: 0 auto; background: #ffffff; border: 1px solid #dbeafe; border-radius: 12px; overflow: hidden;">
+            ${brandedHeader}
+            <main style="padding: 34px 32px; color: #1e293b; font-family: Arial, sans-serif;">
+                <div style="font-size: 34px; line-height: 1; color: #06b6d4;">✓</div>
+                <h1 style="font-size: 26px; margin: 18px 0 10px; color: #0f172a;">Thank you for reaching out</h1>
+                <p style="font-size: 16px; line-height: 1.7; margin: 0 0 18px;">Hi <strong>${safeName}</strong>,</p>
+                <p style="font-size: 15px; line-height: 1.7; color: #475569;">Your inquiry has been received successfully. Thank you for considering my services and taking the time to connect.</p>
+                <div style="margin: 24px 0; padding: 18px; background: #ecfeff; border: 1px solid #a5f3fc; border-radius: 8px; color: #155e75; line-height: 1.7;"><strong>Response time:</strong> I will reply within the next 24 to 48 hours.</div>
+                <p style="line-height: 1.7; margin-bottom: 0;">Best regards,<br><strong>CJ Walet</strong><br><span style="color: #64748b;">${portfolioRole}</span></p>
+            </main>
+            ${brandedFooter}
         </div>`
     };
 
