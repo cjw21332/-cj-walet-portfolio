@@ -142,7 +142,7 @@ GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 
 Do not commit API keys, SMTP passwords, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.
 
-`GITHUB_TOKEN` is used only by the serverless contribution route so private contributions can be aggregated without exposing a token in the browser. The GitHub section refreshes every 20 minutes while visible, pauses in background tabs, and calculates the previous 12 months from the current date.
+`GITHUB_TOKEN` is used only by the serverless contribution route so private contributions can be aggregated without exposing a token in the browser. The GitHub section refreshes once per day, advances to the previous day's completed data, and calculates the previous 12 months from that date.
 
 Transactional email markup lives in `api/emailTemplates/`. Both messages use standalone table-based HTML with inline styles and a plain-text alternative for Gmail, Outlook, and mobile clients.
 

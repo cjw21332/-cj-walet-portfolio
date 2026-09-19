@@ -88,7 +88,7 @@ module.exports = async (req, res) => {
             .slice(0, 3)
             .map(([name]) => name);
 
-        res.setHeader('Cache-Control', 's-maxage=1200, stale-while-revalidate=1200');
+        res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=3600');
         const calendar = body.data.user.contributionsCollection.contributionCalendar;
         const visibleWeeks = calendar.weeks.map(week => ({
             ...week,

@@ -57,8 +57,21 @@ function initGitHubContributions() {
     if (section.dataset.githubPolling === 'true') return;
     section.dataset.githubPolling = 'true';
 
-    const refreshInterval = 20 * 60 * 1000;
+    const refreshInterval = 24 * 60 * 60 * 1000;
     let requestController = null;
+    let displayedToDate = null;
+
+    const getManilaDate = () => {
+        const parts = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Manila',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).formatToParts(new Date());
+        return parts.filter(({ type }) => type !== 'literal')
+            .map(({ type, value }) => [type, value])
+            .reduce((date, [type, value]) => ({ ...date, [type]: value }), {});
+    };
 
     const formatDate = (value) => new Intl.DateTimeFormat(undefined, {
         month: 'short',
@@ -86,6 +99,7 @@ function initGitHubContributions() {
             grid.appendChild(column);
         });
         title.textContent = `${data.totalContributions.toLocaleString()} contributions in the last year`;
+        displayedToDate = data.toDate || data.to?.slice(0, 10) || null;
         summary.textContent = `${formatDate(data.fromDate || data.from)} – ${formatDate(data.toDate || data.to)} · Updated just now`;
         if (months) {
             const start = new Date(`${(data.fromDate || data.from).slice(0, 10)}T00:00:00`);
@@ -145,7 +159,13 @@ function initGitHubContributions() {
 
     const intervalId = window.setInterval(load, refreshInterval);
     document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') load();
+        if (document.visibilityState === 'visible' && displayedToDate) {
+            const { year, month, day } = getManilaDate();
+            const yesterday = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day) - 1))
+                .toISOString()
+                .slice(0, 10);
+            if (yesterday !== displayedToDate) load();
+        }
     });
     load();
     window.addEventListener('pagehide', () => {
