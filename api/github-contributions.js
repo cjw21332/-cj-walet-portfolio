@@ -2,20 +2,8 @@ const USERNAME = 'cjw21332';
 const CONTRIBUTION_COLORS = ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'];
 
 function getDateRange() {
-    const dateFormatter = new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'Asia/Manila',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    });
-    const parts = Object.fromEntries(dateFormatter.formatToParts(new Date())
-        .filter(({ type }) => type !== 'literal')
-        .map(({ type, value }) => [type, value]));
-    const endDate = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day) - 1));
-    const startDate = new Date(endDate);
-    startDate.setUTCFullYear(startDate.getUTCFullYear() - 1);
-    const toDate = endDate.toISOString().slice(0, 10);
-    const fromDate = startDate.toISOString().slice(0, 10);
+    const fromDate = '2025-09-01';
+    const toDate = '2026-09-19';
     return {
         from: `${fromDate}T00:00:00Z`,
         to: `${toDate}T23:59:59Z`,
