@@ -1,0 +1,122 @@
+const https = require('https');
+
+module.exports = async (req, res) => {
+    // Set CORS headers for serverless response
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method Not Allowed' });
+    }
+
+    const { name, email, message } = req.body || {};
+
+    if (!name || !email || !message) {
+        return res.status(400).json({ error: 'Name, Email, and Message are required.' });
+    }
+
+    const API_KEY = process.env.MAILEROO_API_KEY;
+    const FROM_EMAIL = process.env.MAILEROO_FROM_EMAIL;
+
+    if (!API_KEY || !FROM_EMAIL) {
+        return res.status(500).json({ error: 'Mail service is not configured.' });
+    }
+
+    // 1. Notification Email to CJ
+    const notifyPayload = JSON.stringify({
+        from: {
+            email: FROM_EMAIL,
+            name: "Portfolio Inquiry System"
+        },
+        to: [
+            {
+                email: "waletcharlesjames3@gmail.com",
+                name: "CHARLES JAMES WALET"
+            }
+        ],
+        subject: `New Portfolio Message from ${name}`,
+        plain: `You received a new message from your portfolio contact form:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+        html: `<div style="font-family: Arial, sans-serif; padding: 20px; color: #1e293b; background: #f8fafc; border-radius: 8px;">
+            <h2 style="color: #0265dc;">New Portfolio Contact Message</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <hr style="border: none; border-top: 1px solid #cbd5e1; margin: 20px 0;">
+            <p><strong>Message:</strong></p>
+            <p style="white-space: pre-wrap; background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">${message}</p>
+        </div>`
+    });
+
+    // 2. Personalized Auto-Reply to Visitor
+    const autoReplyPayload = JSON.stringify({
+        from: {
+            email: FROM_EMAIL,
+            name: "CHARLES JAMES “CJ” J. WALET"
+        },
+        to: [
+            {
+                email: email,
+                name: name
+            }
+        ],
+        subject: `Thank you for contacting Charles James Walet`,
+        plain: `Hi ${name},\n\nThank you for reaching out to me about your concerns!\n\nI have received your message and I will be replying/emailing back to you within the next 24 hours.\n\nBest regards,\nCHARLES JAMES “CJ” J. WALET\n4th Year BSIT Student & IT Technician Intern\nQuezon City University`,
+        html: `<div style="font-family: Arial, sans-serif; padding: 25px; color: #1e293b; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; max-width: 600px;">
+            <h2 style="color: #0265dc; margin-top: 0;">Thank You for Reaching Out</h2>
+            <p>Hi <strong>${name}</strong>,</p>
+            <p>Thank you for reaching out to me about your concerns!</p>
+            <p>I have received your message and I will be replying/emailing back to you within the next <strong>24 hours</strong>.</p>
+            <br>
+            <p style="margin-bottom: 0;">Best regards,</p>
+            <p style="margin-top: 4px;"><strong>CHARLES JAMES “CJ” J. WALET</strong><br><span style="color: #64748b; font-size: 14px;">4th Year BSIT Student &amp; IT Technician Intern<br>Quezon City University</span></p>
+        </div>`
+    });
+
+    function postMaileroo(payload) {
+        return new Promise((resolve, reject) => {
+            const reqOpts = {
+                hostname: 'smtp.maileroo.com',
+                path: '/send',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Maileroo-Key': API_KEY,
+                    'Content-Length': Buffer.byteLength(payload)
+                }
+            };
+            const postReq = https.request(reqOpts, (response) => {
+                let data = '';
+                response.on('data', chunk => data += chunk);
+                response.on('end', () => {
+                    if (response.statusCode >= 200 && response.statusCode < 300) {
+                        resolve(data);
+                    } else {
+                        reject(new Error(`Maileroo returned status ${response.statusCode}.`));
+                    }
+                });
+            });
+            postReq.on('error', err => reject(err));
+            postReq.write(payload);
+            postReq.end();
+        });
+    }
+
+    try {
+        const results = await Promise.all([
+            postMaileroo(notifyPayload),
+            postMaileroo(autoReplyPayload)
+        ]);
+
+        if (results.some(result => !result)) {
+            return res.status(502).json({ error: 'Mail service did not accept the message.' });
+        }
+
+        return res.status(200).json({ success: true, message: 'Message sent successfully.' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Failed to dispatch email via Maileroo API.' });
+    }
+};

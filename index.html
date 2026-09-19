@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CJ Walet | IT Student &amp; Aspiring Full Stack Developer</title>
+    <!-- Simple CJ Favicon Data URI -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20' font-family='monospace' fill='%230077ff'%3E<CJ/%3E%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="scanline"></div>
+    <div class="grid-background"></div>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <header class="navbar">
+        <div class="logo magnetic-element">
+            <span class="bracket">&lt;</span><span class="logo-text">CJ</span><span class="slash">/</span><span class="bracket">&gt;</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#about" class="nav-item">/about</a>
+            <a href="#skills" class="nav-item">/skills</a>
+            <a href="#experience" class="nav-item">/experience</a>
+            <a href="#projects" class="nav-item">/projects</a>
+            <a href="#github-stats" class="nav-item">/github</a>
+            <a href="#certifications" class="nav-item">/certs</a>
+            <a href="#education" class="nav-item">/education</a>
+            <a href="#contact" class="nav-item">/contact</a>
+        </nav>
+        <div class="header-actions">
+            <button id="theme-toggle" class="btn-icon-nav magnetic-element" title="Toggle Theme (Dark / Light)">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="terminal-toggle" class="btn-terminal magnetic-element" title="Open Shell Terminal">
+                <i class="fas fa-terminal"></i> <span>Shell</span>
+            </button>
+            <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="mobile-nav-overlay" id="mobile-nav">
+        <button class="close-mobile" id="close-mobile"><i class="fas fa-times"></i></button>
+        <a href="#about" class="mobile-link">/about</a>
+        <a href="#skills" class="mobile-link">/skills</a>
+        <a href="#experience" class="mobile-link">/experience</a>
+        <a href="#projects" class="mobile-link">/projects</a>
+        <a href="#github-stats" class="mobile-link">/github</a>
+        <a href="#certifications" class="mobile-link">/certs</a>
+        <a href="#education" class="mobile-link">/education</a>
+        <a href="#contact" class="mobile-link">/contact</a>
+    </div>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="hero-content reveal-on-scroll">
+                <div class="profile-header-group">
+                    <div class="profile-avatar-container tilt-element">
+                        <img src="professional pic.png" alt="CHARLES JAMES “CJ” J. WALET" class="profile-avatar-img">
+                        <div class="profile-avatar-glow"></div>
+                    </div>
+                    <div>
+                        <div class="badge-status">
+                            <span class="status-dot"></span> Open to Internships &amp; Entry-Level Opportunities
+                        </div>
+                <h1 class="hero-title">
+                    Hi, I'm <span class="gradient-text">CHARLES JAMES “CJ” J. WALET</span>
+                </h1>
+                    </div>
+                </div>
+                <p class="hero-subtitle">
+                    4th-year Information Technology student at Quezon City University, passionate about software development, web technologies, and SQL database management. Eager to apply my skills in real-world projects and contribute to collaborative engineering teams.
+                </p>
+                
+                <div class="typing-container">
+                    <span class="prompt">cj@dev:~$</span> <span class="typed-text"></span><span class="cursor-blink">_</span>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="Walet_Charles James CJ_CV.pdf" download="Walet_Charles_James_CV.pdf" class="btn btn-primary magnetic-element">
+                        <i class="fas fa-file-download"></i> <span>Download CV</span>
+                    </a>
+                    <a href="#projects" class="btn btn-secondary magnetic-element">
+                        <span>View Projects</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-interactive-card tilt-element reveal-on-scroll">
+                <div class="card-header">
+                    <div class="window-controls">
+                        <span class="control red"></span>
+                        <span class="control yellow"></span>
+                        <span class="control green"></span>
+                    </div>
+                    <span class="window-title">cj_profile.json</span>
+                    <span class="live-pulse"><i class="fas fa-circle"></i> LIVE</span>
+                </div>
+                <div class="card-body">
+                    <div class="hud-stats-grid">
+                        <div class="hud-stat">
+                            <span class="hud-label">Year Level</span>
+                            <span class="hud-val cyan-glow">4th Year</span>
+                        </div>
+                        <div class="hud-stat">
+                            <span class="hud-label">Program</span>
+                            <span class="hud-val blue-glow">BSIT</span>
+                        </div>
+                        <div class="hud-stat">
+                            <span class="hud-label">Certifications</span>
+                            <span class="hud-val ice-glow">9</span>
+                        </div>
+                    </div>
+
+                    <div class="code-snippet-box">
+                        <pre><code><span class="kwd">const</span> cj = {
+    name: <span class="str">"CHARLES JAMES “CJ” J. WALET"</span>,
+    school: <span class="str">"Quezon City University"</span>,
+    focus: [<span class="str">"Web Development"</span>, <span class="str">"SQL"</span>, <span class="str">"Full Stack"</span>],
+    location: <span class="str">"Quezon City, Philippines"</span>,
+    status: <span class="str">"Looking for opportunities"</span>
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-banner reveal-on-scroll">
+            <div class="stat-item tilt-element">
+                <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+                <h2 class="stat-number" data-target="4">0</h2>
+                <p class="stat-label">Year Level (BSIT)</p>
+            </div>
+            <div class="stat-item tilt-element">
+                <div class="stat-icon"><i class="fas fa-code"></i></div>
+                <h2 class="stat-number" data-target="1">0</h2>
+                <p class="stat-label">Projects Built</p>
+            </div>
+            <div class="stat-item tilt-element">
+                <div class="stat-icon"><i class="fas fa-certificate"></i></div>
+                <h2 class="stat-number" data-target="9">0</h2>
+                <p class="stat-label">Certifications &amp; Courses</p>
+            </div>
+            <div class="stat-item tilt-element">
+                <div class="stat-icon"><i class="fas fa-tools"></i></div>
+                <h2 class="stat-number" data-target="33">0</h2>
+                <p class="stat-label">Technologies &amp; Tools</p>
+            </div>
+        </section>
+
+        <section id="about" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">01.</span>
+                <h2 class="section-title">About Me</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-grid">
+                <div class="about-card-large tilt-element">
+                    <div class="about-badge"><i class="fas fa-user-graduate"></i> Who I Am</div>
+                    <p>
+                        I'm CHARLES JAMES “CJ” J. WALET, a 4th-year BSIT student at Quezon City University based in Quezon City, Philippines. I'm passionate about building web applications, managing databases, and learning modern development frameworks. I'm actively looking for internship and entry-level opportunities to grow as a developer.
+                    </p>
+                    <div class="pillars-grid">
+                        <div class="pillar-card tilt-element">
+                            <div class="pillar-header">
+                                <i class="fas fa-laptop-code pillar-icon"></i>
+                                <h3>Web Development</h3>
+                            </div>
+                            <p>HTML5, CSS3, JavaScript, React, Vite, Tailwind CSS, TypeScript, Bootstrap</p>
+                        </div>
+                        <div class="pillar-card tilt-element">
+                            <div class="pillar-header">
+                                <i class="fas fa-database pillar-icon"></i>
+                                <h3>Database Management</h3>
+                            </div>
+                            <p>SQL, MySQL, PostgreSQL, Supabase, Prisma ORM</p>
+                        </div>
+                        <div class="pillar-card tilt-element">
+                            <div class="pillar-header">
+                                <i class="fas fa-server pillar-icon"></i>
+                                <h3>Backend Development</h3>
+                            </div>
+                            <p>Node.js, NestJS, npm, Postman, REST APIs</p>
+                        </div>
+                        <div class="pillar-card tilt-element">
+                            <div class="pillar-header">
+                                <i class="fas fa-tools pillar-icon"></i>
+                                <h3>Tools & Workflow</h3>
+                            </div>
+                            <p>Git, GitHub, VS Code, Terminal, AWS Amplify, Vercel</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section reveal-on-scroll skills-section" aria-label="Skills">
+            <div class="skills-header">
+                <span class="skills-eyebrow">CAPABILITIES</span>
+                <h2 class="skills-title">Skills</h2>
+                <p class="skills-subtext">Hover a discipline to explore the technologies behind the work.</p>
+            </div>
+
+            <div class="skills-layout">
+                <div class="skills-categories" role="tablist" aria-label="Skill categories">
+                    <button class="skill-cat-btn" role="tab" id="tab-frontend" aria-selected="false" aria-controls="skills-panel" data-category="frontend" tabindex="0">
+                        <span class="cat-label">Frontend</span>
+                    </button>
+                    <button class="skill-cat-btn" role="tab" id="tab-backend" aria-selected="false" aria-controls="skills-panel" data-category="backend" tabindex="0">
+                        <span class="cat-label">Backend</span>
+                    </button>
+                    <button class="skill-cat-btn" role="tab" id="tab-database" aria-selected="false" aria-controls="skills-panel" data-category="database" tabindex="0">
+                        <span class="cat-label">Database</span>
+                    </button>
+                    <button class="skill-cat-btn" role="tab" id="tab-devops" aria-selected="false" aria-controls="skills-panel" data-category="devops" tabindex="0">
+                        <span class="cat-label">DevOps &amp; Tools</span>
+                    </button>
+                    <button class="skill-cat-btn" role="tab" id="tab-others" aria-selected="false" aria-controls="skills-panel" data-category="others" tabindex="0">
+                        <span class="cat-label">Others</span>
+                    </button>
+                </div>
+
+                <div class="skills-panel" id="skills-panel" role="tabpanel" aria-labelledby="tab-frontend">
+                    <div class="skills-panel-inner">
+                        <p class="skills-desc"></p>
+                        <div class="skills-tech-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">03.</span>
+                <h2 class="section-title">Work &amp; Internship Experience</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item tilt-element">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="school-title-group">
+                                <img src="concentrix.jpg" alt="Concentrix Logo" class="school-logo">
+                                <div>
+                                    <h3 class="role-title">IT Technician (Intern)</h3>
+                                    <h4 class="company-name location-hover-target">
+                                        <i class="fas fa-building"></i> Concentrix · SM Megamall
+                                        <div class="map-tooltip-card">
+                                            <div class="map-card-header">
+                                                <i class="fas fa-map-marker-alt"></i> Concentrix SM Megamall
+                                            </div>
+                                            <div class="map-frame-container">
+                                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.272186718711!2d121.05436697587635!3d14.58354717750849!2m3!10f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c83f9829f075%3A0x7b6d1945146c2bfb!2sSM%20Megamall!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph" width="280" height="150" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            </div>
+                                            <div class="map-card-footer">
+                                                <span><i class="fas fa-location-dot"></i> IT Operations Dept, SM Megamall, Mandaluyong</span>
+                                            </div>
+                                        </div>
+                                    </h4>
+                                </div>
+                            </div>
+                            <span class="timeline-date">Sept 15, 2026 – Present</span>
+                        </div>
+                        <p class="role-description">
+                            Active IT Operations Intern responsible for maintaining workstation uptime, resolving hardware/software issues, and managing computer deployments.
+                        </p>
+                        <div class="role-highlights">
+                            <div class="highlight-chip"><i class="fas fa-check-circle"></i> Troubleshoot and resolve internal computer hardware &amp; software issues for end users</div>
+                            <div class="highlight-chip"><i class="fas fa-check-circle"></i> Perform system unit reimaging to restore or refresh workstation configurations</div>
+                            <div class="highlight-chip"><i class="fas fa-check-circle"></i> Install and configure applications on company computers as part of IT support requests</div>
+                            <div class="highlight-chip"><i class="fas fa-check-circle"></i> Diagnose and repair hardware problems on desktop/laptop units within IT Operations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">04.</span>
+                <h2 class="section-title">Projects</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="projects-grid single-project">
+                <div class="project-card tilt-element">
+                    <div class="project-image">
+                        <div class="project-badge">FULL STACK / AI</div>
+                        <i class="fas fa-brain project-preview-icon"></i>
+                    </div>
+                    <div class="project-details">
+                        <h3 class="project-title">AI Reviewer</h3>
+                        <p class="project-desc">
+                            A web application for students that generates AI-powered study reviewers, flashcards, and quizzes from uploaded files including PDF, PPTX, DOCX, and images. Built as a capstone project leveraging modern full-stack technologies and the Anthropic Claude API.
+                        </p>
+                        <div class="project-tech">
+                            <span>React</span>
+                            <span>Vite</span>
+                            <span>Tailwind CSS</span>
+                            <span>Node.js</span>
+                            <span>NestJS</span>
+                            <span>Prisma</span>
+                            <span>PostgreSQL</span>
+                            <span>Supabase</span>
+                            <span>Claude API</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="btn-icon magnetic-element"><i class="fab fa-github"></i> Source</a>
+                            <a href="#" class="btn-icon magnetic-element"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="github-stats" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">05.</span>
+                <h2 class="section-title">Open-Source Footprint</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="github-stats-container tilt-element">
+                <div class="github-stats-header">
+                    <div class="gh-user-info">
+                        <img src="https://github.com/cjw21332.png" alt="cjw21332 GitHub Avatar" class="gh-avatar">
+                        <div>
+                            <h3>cjw21332</h3>
+                            <p><i class="fab fa-github"></i> <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer">github.com/cjw21332</a></p>
+                        </div>
+                    </div>
+                    <span class="gh-badge"><i class="fas fa-lock-open"></i> Public &amp; Private Contributions</span>
+                </div>
+
+                <div class="github-metrics-grid">
+                    <div class="gh-metric-card">
+                        <span class="gh-metric-label">Primary Languages</span>
+                        <span class="gh-metric-val">HTML, JS, SQL</span>
+                        <div class="lang-progress-bar">
+                            <div class="lang-seg seg-html" style="width: 45%" title="HTML"></div>
+                            <div class="lang-seg seg-js" style="width: 35%" title="JavaScript"></div>
+                            <div class="lang-seg seg-sql" style="width: 20%" title="SQL"></div>
+                        </div>
+                    </div>
+
+                    <div class="gh-metric-card">
+                        <span class="gh-metric-label">Repositories</span>
+                        <span class="gh-metric-val">cjw21332</span>
+                        <p class="gh-subtext">Building web apps &amp; academic projects</p>
+                    </div>
+
+                    <div class="gh-metric-card">
+                        <span class="gh-metric-label">Organization / College</span>
+                        <span class="gh-metric-val">Quezon City University</span>
+                        <p class="gh-subtext">BSIT 4th Year Student</p>
+                    </div>
+                </div>
+
+                <div class="github-chart-box">
+                    <div class="gh-chart-title">
+                        <h4><i class="fas fa-calendar-alt"></i> 25 contributions in the last year (Public &amp; Private)</h4>
+                        <span class="gh-contrib-summary">Sep 14, 2025 – Sep 19, 2026</span>
+                    </div>
+
+                    <div class="gh-months-bar">
+                        <span>Sep 2025</span>
+                        <span>Oct</span>
+                        <span>Nov</span>
+                        <span>Dec</span>
+                        <span>Jan 2026</span>
+                        <span>Feb</span>
+                        <span>Mar</span>
+                        <span>Apr</span>
+                        <span>May</span>
+                        <span>Jun</span>
+                        <span>Jul</span>
+                        <span>Aug</span>
+                        <span>Sep 2026</span>
+                    </div>
+
+                    <div class="gh-graph-wrapper">
+                        <img src="https://ghchart.rshah.org/0077ff/cjw21332" alt="cjw21332's GitHub Contribution Chart (25 contributions in the last year)" class="gh-chart-img" onerror="this.onerror=null; this.src='https://github-readme-stats.vercel.app/api?username=cjw21332&amp;show_icons=true&amp;theme=algolia';">
+                    </div>
+
+                    <div class="gh-chart-legend-row">
+                        <span class="gh-contrib-footnote"><strong>cjw21332</strong>'s public &amp; private repository contributions aggregated live.</span>
+                        <div class="gh-legend-scale">
+                            <span>Less</span>
+                            <span class="sq sq-0" title="No contributions"></span>
+                            <span class="sq sq-1" title="Low contributions"></span>
+                            <span class="sq sq-2" title="Medium-low contributions"></span>
+                            <span class="sq sq-3" title="Medium-high contributions"></span>
+                            <span class="sq sq-4" title="High contributions"></span>
+                            <span>More</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">06.</span>
+                <h2 class="section-title">Certifications &amp; Courses</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="cert-partition-container">
+                <!-- Partition 1: AWS & Cloud -->
+                <div class="cert-category-block tilt-element">
+                    <div class="cert-category-header">
+                        <i class="fab fa-aws cert-cat-icon"></i>
+                        <div>
+                            <h3>AWS &amp; Cloud Skill Builder Certifications</h3>
+                            <p>Amazon Web Services Official Training &amp; Exam Prep Courses</p>
+                        </div>
+                    </div>
+                    <div class="certs-grid">
+                        <div class="cert-card cert-preview-target" data-cert-title="Foundations of Prompt Engineering" data-cert-url="certifications/Foundations of Prompt Engineering cert.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>Foundations of Prompt Engineering</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="AWS ML Engineer – Associate (MLA-C01) Prep" data-cert-url="certifications/Machine Learning Engineering.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>AWS ML Engineer – Associate (MLA-C01) Prep</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="Intro to Generative AI: Art of the Possible" data-cert-url="certifications/Introduction to Generative AI - Art of the Possible.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>Intro to Generative AI: Art of the Possible</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="AWS Amplify – Getting Started" data-cert-url="certifications/AWS Amplify Getting Started.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>AWS Amplify – Getting Started</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="Amazon Q Developer – Getting Started" data-cert-url="certifications/Amazon Q Developer Getting Started.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>Amazon Q Developer – Getting Started</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="Amazon Location Service – Getting Started" data-cert-url="certifications/Getting Started with Amazon Location Service.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>Amazon Location Service – Getting Started</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="AWS Developer – Associate (DVA-C02) Prep" data-cert-url="certifications/Certified Developer - Associate.pdf">
+                            <div class="cert-icon"><i class="fab fa-aws"></i></div>
+                            <span class="cert-date">Jul 2025</span>
+                            <h3>AWS Developer – Associate (DVA-C02) Prep</h3>
+                            <p>AWS Training &amp; Certification</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> AWS Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Partition 2: Academic & Institutional -->
+                <div class="cert-category-block tilt-element">
+                    <div class="cert-category-header">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/1/11/QCU_Logo_2019.png" alt="QCU Logo" class="school-logo">
+                        <div>
+                            <h3>Academic Seminars &amp; Research Workshops</h3>
+                            <p>Quezon City University Institutional Certifications</p>
+                        </div>
+                    </div>
+                    <div class="certs-grid">
+                        <div class="cert-card cert-preview-target" data-cert-title="Fundamentals of Research &amp; Capstone Writing" data-cert-url="certifications/Fundamentals of Research and Capstone Writing.pdf">
+                            <div class="cert-icon"><img src="https://upload.wikimedia.org/wikipedia/en/1/11/QCU_Logo_2019.png" alt="QCU Logo" class="cert-school-badge"></div>
+                            <span class="cert-date">Academic</span>
+                            <h3>Fundamentals of Research &amp; Capstone Writing</h3>
+                            <p>Quezon City University</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> QCU Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+
+                        <div class="cert-card cert-preview-target" data-cert-title="CyberSafety Seminar" data-cert-url="certifications/CyberSafety Seminar.pdf">
+                            <div class="cert-icon"><img src="https://upload.wikimedia.org/wikipedia/en/1/11/QCU_Logo_2019.png" alt="QCU Logo" class="cert-school-badge"></div>
+                            <span class="cert-date">Academic</span>
+                            <h3>CyberSafety Seminar</h3>
+                            <p>Quezon City University</p>
+                            <div class="cert-hover-preview">
+                                <div class="cert-preview-badge"><i class="fas fa-certificate"></i> QCU Certificate</div>
+                                <p>Click to view full certificate document</p>
+                                <span><i class="fas fa-eye"></i> View Certificate</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">07.</span>
+                <h2 class="section-title">Education</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item tilt-element">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="school-title-group">
+                                <img src="https://upload.wikimedia.org/wikipedia/en/1/11/QCU_Logo_2019.png" alt="Quezon City University Logo" class="school-logo">
+                                <div>
+                                    <h3 class="role-title">Bachelor of Science in Information Technology</h3>
+                                    <h4 class="company-name location-hover-target">
+                                        <i class="fas fa-university"></i> Quezon City University
+                                        <div class="map-tooltip-card">
+                                            <div class="map-card-header">
+                                                <i class="fas fa-map-marker-alt"></i> Quezon City University
+                                            </div>
+                                            <div class="map-frame-container">
+                                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3859.390558774786!2d121.034325!3d14.7000917!2m3!10f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b1022d861463%3A0xc324a35017e810a9!2sQuezon%20City%20University!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph" width="280" height="150" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            </div>
+                                            <div class="map-card-footer">
+                                                <span><i class="fas fa-location-dot"></i> 673 Quirino Highway, San Bartolome, Novaliches, Quezon City</span>
+                                            </div>
+                                        </div>
+                                    </h4>
+                                </div>
+                            </div>
+                            <span class="timeline-date">4th Year – Present (Exp. 2027)</span>
+                        </div>
+                        <p class="role-description">
+                            Focusing on software development, web technologies, and database management. Currently building an AI-powered study reviewer capstone project using React, Node.js, Prisma, PostgreSQL, and Claude API.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item tilt-element">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="school-title-group">
+                                <img src="sfhs logo.jpg" alt="San Francisco High School Logo" class="school-logo">
+                                <div>
+                                    <h3 class="role-title">High School Education (SHS &amp; JHS)</h3>
+                                    <h4 class="company-name location-hover-target">
+                                        <i class="fas fa-school"></i> San Francisco High School
+                                        <div class="map-tooltip-card">
+                                            <div class="map-card-header">
+                                                <i class="fas fa-map-marker-alt"></i> San Francisco High School
+                                            </div>
+                                            <div class="map-frame-container">
+                                                <iframe src="https://www.google.com/maps?q=San+Francisco+High+School,+Misamis+St,+Bgy.+Sto.+Cristo,+Quezon+City&amp;output=embed" width="280" height="140" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            </div>
+                                            <div class="map-card-footer">
+                                                <a href="https://maps.app.goo.gl/sF59Sf5yxZ3CW8gY8" target="_blank" rel="noopener noreferrer" class="map-direct-link">
+                                                    <i class="fas fa-external-link-alt"></i> Open in Google Maps
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </h4>
+                                </div>
+                            </div>
+                            <span class="timeline-date">2017 – 2023</span>
+                        </div>
+                        <p class="role-description">
+                            <strong>Senior High School (STEM Strand, 2021 – 2023)</strong><br>
+                            Specialized in Science, Technology, Engineering, and Mathematics.
+                        </p>
+                        <div class="role-highlights">
+                            <div class="highlight-chip"><i class="fas fa-award"></i> With Honors (Grade 12 &amp; Grade 11)</div>
+                            <div class="highlight-chip"><i class="fas fa-award"></i> Leadership Awardee (Grade 12)</div>
+                        </div>
+                        <p class="role-description" style="margin-top: 1rem;">
+                            <strong>Junior High School (2017 – 2021)</strong>
+                        </p>
+                        <div class="role-highlights">
+                            <div class="highlight-chip"><i class="fas fa-trophy"></i> Math Quizbee Overall Champion (Grade 10)</div>
+                            <div class="highlight-chip"><i class="fas fa-award"></i> With Honors (Grade 10)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section reveal-on-scroll">
+            <div class="section-header">
+                <span class="section-num">08.</span>
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="contact-card tilt-element">
+                <p class="contact-intro">
+                    I'm currently looking for internship and entry-level opportunities. Feel free to reach out if you'd like to collaborate or have a project in mind!
+                </p>
+                <div class="contact-direct">
+                    <a href="mailto:waletcharlesjames3@gmail.com" class="contact-chip magnetic-element">
+                        <i class="fas fa-envelope"></i> waletcharlesjames3@gmail.com
+                    </a>
+                    <a href="tel:09947137570" class="contact-chip magnetic-element">
+                        <i class="fas fa-phone"></i> 0994-713-7570
+                    </a>
+                    <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer" class="contact-chip social-preview-target">
+                        <i class="fab fa-github"></i> github.com/cjw21332
+                        <div class="social-preview-card">
+                            <div class="social-card-header">
+                                <img src="https://github.com/cjw21332.png" alt="GitHub Avatar" class="social-card-avatar">
+                                <div>
+                                    <h4>cjw21332</h4>
+                                    <p>Charles James Walet</p>
+                                </div>
+                            </div>
+                            <p class="social-card-bio">4th-Year BSIT Student @ Quezon City University | Aspiring Full Stack Developer</p>
+                            <div class="social-card-footer">
+                                <span><i class="fab fa-github"></i> Open GitHub Profile</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.facebook.com/its.charles.james" target="_blank" rel="noopener noreferrer" class="contact-chip social-preview-target">
+                        <i class="fab fa-facebook"></i> Facebook Profile
+                        <div class="social-preview-card">
+                            <div class="social-card-header">
+                                <img src="professional pic.png" alt="Facebook Profile Pic" class="social-card-avatar">
+                                <div>
+                                    <h4>Charles James Walet</h4>
+                                    <p>@its.charles.james</p>
+                                </div>
+                            </div>
+                            <p class="social-card-bio">Quezon City, Philippines · BSIT @ Quezon City University</p>
+                            <div class="social-card-footer">
+                                <span><i class="fab fa-facebook"></i> Open Facebook Profile</span>
+                            </div>
+                        </div>
+                    </a>
+                    <span class="contact-chip">
+                        <i class="fas fa-map-marker-alt"></i> Quezon City, Philippines
+                    </span>
+                </div>
+                <form id="contact-form" class="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" name="Name" id="name" required placeholder=" ">
+                            <label for="name">Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="Email" id="email" required placeholder=" " title="Please enter a valid email address (e.g. name@domain.com)">
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="Message" id="message" rows="5" maxlength="2500" required placeholder=" "></textarea>
+                        <label for="message">Message</label>
+                        <div class="char-counter"><span id="char-count">0</span> / 2500 characters</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary magnetic-element btn-block">
+                        <span>Send Message</span> <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <div id="message-success-modal" class="message-success-modal" role="dialog" aria-modal="true" aria-labelledby="message-success-title" aria-describedby="message-success-copy">
+        <div class="message-success-card">
+            <button type="button" class="message-success-close" id="message-success-close" aria-label="Close confirmation">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="success-checkmark" aria-hidden="true">
+                <svg viewBox="0 0 52 52" role="presentation">
+                    <circle class="success-checkmark-circle" cx="26" cy="26" r="24" fill="none"></circle>
+                    <path class="success-checkmark-path" fill="none" d="M14 27l8 8 16-18"></path>
+                </svg>
+            </div>
+            <span class="success-kicker">TRANSMISSION COMPLETE</span>
+            <h2 id="message-success-title">Message sent successfully</h2>
+            <p id="message-success-copy">Thank you for inquiring about my services. I will reply within the next 24 to 48 hours.</p>
+            <button type="button" class="btn btn-primary message-success-action" id="message-success-action">Continue exploring</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-intro">
+                    <span class="footer-kicker">CHARLES JAMES “CJ” J. WALET</span>
+                    <h2>Building thoughtful software<br>for real people.</h2>
+                    <a href="mailto:waletcharlesjames3@gmail.com" class="footer-email">
+                        <i class="fas fa-envelope"></i>
+                        <span>waletcharlesjames3@gmail.com</span>
+                        <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <nav class="footer-explore" aria-label="Footer navigation">
+                    <span class="footer-kicker">EXPLORE</span>
+                    <a href="#about">About</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#experience">Experience</a>
+                </nav>
+
+                <div class="footer-social-group">
+                    <span class="footer-kicker">ELSEWHERE</span>
+                    <div class="footer-socials">
+                        <a href="https://github.com/cjw21332" target="_blank" rel="noopener noreferrer" class="magnetic-element" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.facebook.com/its.charles.james" target="_blank" rel="noopener noreferrer" class="magnetic-element" title="Facebook" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>&copy; 2026 CHARLES JAMES “CJ” J. WALET</span>
+                <span>QUEZON CITY, PHILIPPINES</span>
+                <a href="#hero">BACK TO TOP <span aria-hidden="true">&uarr;</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="pdf-modal" class="modal">
+        <div class="modal-content pdf-modal-content">
+            <div class="cli-header pdf-header">
+                <div class="window-controls">
+                    <span class="control red close-pdf"></span>
+                    <span class="control yellow"></span>
+                    <span class="control green"></span>
+                </div>
+                <span id="pdf-modal-title">Certificate Document Viewer</span>
+                <button class="pdf-close-btn close-pdf" title="Close Viewer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="pdf-viewer-container">
+                <iframe id="pdf-frame" src="" width="100%" height="100%" style="border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="cli-modal" class="modal">
+        <div class="modal-content">
+            <div class="cli-header">
+                <div class="window-controls">
+                    <span class="control red close-cli"></span>
+                    <span class="control yellow"></span>
+                    <span class="control green"></span>
+                </div>
+                <span>cj-walet-shell-v1.0.0</span>
+            </div>
+            <div class="cli-body">
+                <div id="cli-output">
+                    <p>CJ Walet Interactive Portfolio Shell v1.0.0</p>
+                    <p>Type <span class="highlight">'help'</span> for available commands.</p>
+                </div>
+                <div class="cli-input-row">
+                    <span class="prompt">visitor@cj:~$</span>
+                    <input type="text" id="cli-input" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
