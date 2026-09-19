@@ -86,7 +86,7 @@ module.exports = async (req, res) => {
         console.error('Maileroo delivery failed:', error);
         return res.status(502).json({
             error: 'Maileroo did not accept the email request.',
-            detail: error.message
+            detail: 'See the server logs for the Maileroo response.'
         });
     }
 };

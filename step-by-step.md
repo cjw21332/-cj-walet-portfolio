@@ -104,9 +104,11 @@ In the Vercel project, open **Settings → Environment Variables** and add these
 ```text
 MAILEROO_API_KEY=the_rotated_maileroo_api_key
 MAILEROO_FROM_EMAIL=the_verified_maileroo_sender_address
+MAILEROO_VERIFIED_DOMAIN=your-verified-domain.example
 ```
 
 The sender address must be verified in Maileroo. Do not use a visitor's email address as the `from` address.
+`MAILEROO_VERIFIED_DOMAIN` is optional, but when configured it lets the server log confirm that the sender address belongs to the expected verified domain.
 
 After saving the variables:
 
@@ -132,6 +134,7 @@ If the form shows **Unable to Send**:
 3. Confirm the Maileroo sender is verified.
 4. Confirm the rotated key is active.
 5. Redeploy after changing environment variables.
+6. Read the server logs for the full Maileroo status code, response body, redacted request metadata, API-key presence check, and sender-domain check.
 
 ## Step 6: Add a custom domain
 
