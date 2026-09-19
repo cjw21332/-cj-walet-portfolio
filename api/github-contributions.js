@@ -1,4 +1,5 @@
 const USERNAME = 'cjw21332';
+const CONTRIBUTION_COLORS = ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'];
 
 function getDateRange() {
     const dateFormatter = new Intl.DateTimeFormat('en-CA', {
@@ -23,19 +24,65 @@ function getDateRange() {
     };
 }
 
+function buildCalendar(contributions, fromDate, toDate) {
+    const byDate = new Map(contributions.map(day => [day.date, day]));
+    const days = [];
+    const cursor = new Date(`${fromDate}T00:00:00Z`);
+    const end = new Date(`${toDate}T00:00:00Z`);
+
+    while (cursor <= end) {
+        const date = cursor.toISOString().slice(0, 10);
+        const source = byDate.get(date);
+        const count = Number(source?.count || 0);
+        days.push({
+            date,
+            contributionCount: count,
+            color: source?.color || CONTRIBUTION_COLORS[Math.min(Number(source?.level || 0), 4)]
+        });
+        cursor.setUTCDate(cursor.getUTCDate() + 1);
+    }
+
+    const weeks = [];
+    for (let index = 0; index < days.length; index += 7) {
+        weeks.push({ contributionDays: days.slice(index, index + 7) });
+    }
+    return {
+        totalContributions: days.reduce((total, day) => total + day.contributionCount, 0),
+        weeks
+    };
+}
+
+async function getPublicContributionData(fromDate, toDate) {
+    const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${USERNAME}?y=last`, {
+        headers: { 'User-Agent': 'CJ-Walet-Portfolio' }
+    });
+    if (!response.ok) throw new Error(`Public contribution API HTTP ${response.status}`);
+    const body = await response.json();
+    const contributions = Array.isArray(body.contributions)
+        ? body.contributions.filter(day => day.date >= fromDate && day.date <= toDate)
+        : [];
+    if (!contributions.length) throw new Error('Public contribution API returned no calendar data.');
+    return buildCalendar(contributions, fromDate, toDate);
+}
+
 module.exports = async (req, res) => {
     if (req.method !== 'GET') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
     const token = process.env.GITHUB_TOKEN;
+    const { from, to, fromDate, toDate } = getDateRange();
     if (!token) {
-        console.warn('[GitHub] GITHUB_TOKEN is missing at request time.');
-        return res.status(503).json({ error: 'GitHub contributions are not configured.' });
+        try {
+            const calendar = await getPublicContributionData(fromDate, toDate);
+            res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=3600');
+            return res.status(200).json({ username: USERNAME, from, to, fromDate, toDate, ...calendar });
+        } catch (error) {
+            console.error('[GitHub] Public contribution fallback failed:', error);
+            return res.status(502).json({ error: 'GitHub contributions could not be loaded.' });
+        }
     }
     console.info('[GitHub] Loading contribution data for cjw21332.');
-
-    const { from, to, fromDate, toDate } = getDateRange();
     const query = `query($login:String!, $from:DateTime!, $to:DateTime!) {
         user(login:$login) {
             repositories(first:100, ownerAffiliations:OWNER, isFork:false) {
