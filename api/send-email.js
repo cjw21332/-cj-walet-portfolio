@@ -1,5 +1,3 @@
-const https = require('https');
-
 module.exports = async (req, res) => {
     // Set CORS headers for serverless response
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -39,7 +37,7 @@ module.exports = async (req, res) => {
     const safeEmail = escapeHtml(email);
     const safeMessage = escapeHtml(message);
 
-    const notifyPayload = JSON.stringify({
+    const notifyPayload = {
         from: FROM_EMAIL,
         to: "waletcharlesjames3@gmail.com",
         subject: `New Portfolio Message from ${name}`,
@@ -52,10 +50,10 @@ module.exports = async (req, res) => {
             <p><strong>Message:</strong></p>
             <p style="white-space: pre-wrap; background: #ffffff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">${safeMessage}</p>
         </div>`
-    });
+    };
 
     // 2. Personalized Auto-Reply to Visitor
-    const autoReplyPayload = JSON.stringify({
+    const autoReplyPayload = {
         from: FROM_EMAIL,
         to: email,
         subject: `Thank you for contacting Charles James Walet`,
@@ -69,34 +67,26 @@ module.exports = async (req, res) => {
             <p style="margin-bottom: 0;">Best regards,</p>
             <p style="margin-top: 4px;"><strong>CHARLES JAMES “CJ” J. WALET</strong><br><span style="color: #64748b; font-size: 14px;">4th Year BSIT Student &amp; IT Technician Intern<br>Quezon City University</span></p>
         </div>`
-    });
+    };
 
     function postMaileroo(payload) {
-        return new Promise((resolve, reject) => {
-            const reqOpts = {
-                hostname: 'smtp.maileroo.com',
-                path: '/send',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-Key': API_KEY,
-                    'Content-Length': Buffer.byteLength(payload)
-                }
-            };
-            const postReq = https.request(reqOpts, (response) => {
-                let data = '';
-                response.on('data', chunk => data += chunk);
-                response.on('end', () => {
-                    if (response.statusCode >= 200 && response.statusCode < 300) {
-                        resolve(data);
-                    } else {
-                        reject(new Error(`Maileroo returned status ${response.statusCode}: ${data.slice(0, 500)}`));
-                    }
-                });
-            });
-            postReq.on('error', err => reject(err));
-            postReq.write(payload);
-            postReq.end();
+        const formData = new FormData();
+        Object.entries(payload).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        return fetch('https://smtp.maileroo.com/send', {
+            method: 'POST',
+            headers: {
+                'X-API-Key': API_KEY
+            },
+            body: formData
+        }).then(async (response) => {
+            const data = await response.text();
+            if (!response.ok) {
+                throw new Error(`Maileroo returned status ${response.status}: ${data.slice(0, 500)}`);
+            }
+            return data;
         });
     }
 
@@ -113,6 +103,6 @@ module.exports = async (req, res) => {
         return res.status(200).json({ success: true, message: 'Message sent successfully.' });
     } catch (error) {
         console.error('Maileroo delivery failed:', error);
-        return res.status(500).json({ error: 'Failed to dispatch email via Maileroo API.' });
+        return res.status(502).json({ error: 'Maileroo did not accept the email request.' });
     }
 };
