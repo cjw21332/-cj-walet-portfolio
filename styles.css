@@ -181,8 +181,8 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .logo img {
-    width: 112px;
-    height: auto;
+    width: 42px;
+    height: 42px;
     display: block;
 }
 
@@ -1109,8 +1109,8 @@ main {
 }
 
 .footer-logo {
-    width: 132px;
-    height: auto;
+    width: 68px;
+    height: 68px;
     margin-bottom: 1rem;
 }
 
