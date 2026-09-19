@@ -90,7 +90,8 @@ Portfolio/
 ├── styles.css                 Layout, themes, animations, and responsive styles
 ├── script.js                  UI behavior, skills data, terminal, forms, and animations
 ├── api/
-│   └── send-email.js          Serverless contact-form email handler
+│   ├── send-email.js          Serverless contact-form email handler
+│   └── mailer.js              Maileroo API delivery helper
 ├── certifications/            Certificate PDF documents
 ├── professional pic.png       Profile image
 ├── concentrix.jpg             Internship company logo

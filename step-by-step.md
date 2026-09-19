@@ -25,6 +25,7 @@ This project contains:
 - A static portfolio frontend in `index.html`, `styles.css`, and `script.js`
 - Images and PDF certificates
 - A serverless contact endpoint at `api/send-email.js`
+- A Maileroo delivery helper at `api/mailer.js`
 - A Maileroo integration that sends the portfolio notification and visitor auto-reply
 
 Use a host that supports serverless functions. **Vercel is the recommended option** because it supports this repository layout directly.
@@ -50,6 +51,7 @@ The current frontend no longer sends mail directly and does not need a client-si
    styles.css
    script.js
    api/send-email.js
+   api/mailer.js
    certifications/
    ```
 

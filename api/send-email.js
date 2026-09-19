@@ -1,3 +1,5 @@
+const { sendMail } = require('./mailer');
+
 module.exports = async (req, res) => {
     // Set CORS headers for serverless response
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -69,31 +71,10 @@ module.exports = async (req, res) => {
         </div>`
     };
 
-    function postMaileroo(payload) {
-        const formData = new FormData();
-        Object.entries(payload).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-
-        return fetch('https://smtp.maileroo.com/send', {
-            method: 'POST',
-            headers: {
-                'X-API-Key': API_KEY
-            },
-            body: formData
-        }).then(async (response) => {
-            const data = await response.text();
-            if (!response.ok) {
-                throw new Error(`Maileroo returned status ${response.status}: ${data.slice(0, 500)}`);
-            }
-            return data;
-        });
-    }
-
     try {
         const results = await Promise.all([
-            postMaileroo(notifyPayload),
-            postMaileroo(autoReplyPayload)
+            sendMail({ apiKey: API_KEY, ...notifyPayload }),
+            sendMail({ apiKey: API_KEY, ...autoReplyPayload })
         ]);
 
         if (results.some(result => !result)) {
@@ -103,6 +84,9 @@ module.exports = async (req, res) => {
         return res.status(200).json({ success: true, message: 'Message sent successfully.' });
     } catch (error) {
         console.error('Maileroo delivery failed:', error);
-        return res.status(502).json({ error: 'Maileroo did not accept the email request.' });
+        return res.status(502).json({
+            error: 'Maileroo did not accept the email request.',
+            detail: error.message
+        });
     }
 };
