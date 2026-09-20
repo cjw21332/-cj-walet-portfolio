@@ -2375,6 +2375,62 @@ a.contact-chip:hover {
     color: #94a3b8;
 }
 
+[data-theme="dark"] .footer {
+    background: #f8fafc;
+    border-top-color: #dbe4ef;
+}
+
+[data-theme="dark"] .footer-content {
+    color: #475569;
+}
+
+[data-theme="dark"] .footer-logo {
+    content: url("assets/cjw-logo-light.svg");
+}
+
+[data-theme="dark"] .footer-kicker {
+    color: #0265dc;
+}
+
+[data-theme="dark"] .footer-intro h2,
+[data-theme="dark"] .footer-email {
+    color: #0f172a;
+}
+
+[data-theme="dark"] .footer-email:hover,
+[data-theme="dark"] .footer-explore a:hover,
+[data-theme="dark"] .footer-bottom a:hover {
+    color: #0265dc;
+}
+
+[data-theme="dark"] .footer-email .fa-arrow-up-right-from-square {
+    color: #0265dc;
+}
+
+[data-theme="dark"] .footer-explore a,
+[data-theme="dark"] .footer-socials a {
+    color: #475569;
+}
+
+[data-theme="dark"] .footer-socials a {
+    border-color: #cbd5e1;
+}
+
+[data-theme="dark"] .footer-socials a:hover {
+    color: #0265dc;
+    border-color: #0265dc;
+    background: rgba(2, 101, 220, 0.08);
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top-color: #dbe4ef;
+    color: #64748b;
+}
+
+[data-theme="dark"] .footer-bottom a {
+    color: #64748b;
+}
+
 .modal {
     display: none;
     position: fixed;
