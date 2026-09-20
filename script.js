@@ -816,8 +816,7 @@ function initCursor() {
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        cursor.style.left = `${mouseX}px`;
-        cursor.style.top = `${mouseY}px`;
+        cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
 
         if (!initialized) {
             cursor.style.opacity = '1';
@@ -829,10 +828,9 @@ function initCursor() {
     });
 
     function animateFollower() {
-        posX += (mouseX - posX) * 0.15;
-        posY += (mouseY - posY) * 0.15;
-        follower.style.left = `${posX}px`;
-        follower.style.top = `${posY}px`;
+        posX += (mouseX - posX) * 0.12;
+        posY += (mouseY - posY) * 0.12;
+        follower.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
         requestAnimationFrame(animateFollower);
     }
     animateFollower();
