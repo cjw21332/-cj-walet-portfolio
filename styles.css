@@ -241,8 +241,7 @@ body::-webkit-scrollbar-thumb:hover {
     content: url("assets/cjw-logo-dark.svg");
 }
 
-[data-theme="light"] .logo img,
-[data-theme="light"] .footer-logo {
+[data-theme="light"] .logo img {
     content: url("assets/cjw-logo-light.svg");
 }
 
@@ -2338,6 +2337,42 @@ a.contact-chip:hover {
 
 .footer-bottom a:hover {
     color: var(--accent-electric);
+}
+
+[data-theme="light"] .footer {
+    background: #05070b;
+    border-top-color: #1e293b;
+}
+
+[data-theme="light"] .footer-content {
+    color: #cbd5e1;
+}
+
+[data-theme="light"] .footer-logo {
+    content: url("assets/cjw-logo-dark.svg");
+}
+
+[data-theme="light"] .footer-intro h2,
+[data-theme="light"] .footer-email {
+    color: #f8fafc;
+}
+
+[data-theme="light"] .footer-explore a,
+[data-theme="light"] .footer-socials a {
+    color: #cbd5e1;
+}
+
+[data-theme="light"] .footer-socials a {
+    border-color: #334155;
+}
+
+[data-theme="light"] .footer-bottom {
+    border-top-color: #1e293b;
+    color: #94a3b8;
+}
+
+[data-theme="light"] .footer-bottom a {
+    color: #94a3b8;
 }
 
 .modal {
