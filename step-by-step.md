@@ -116,7 +116,7 @@ HCAPTCHA_SECRET=your_hcaptcha_secret
 GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 ```
 
-Use the SMTP account email and password from Maileroo. Add the secret key from the hCaptcha dashboard as `HCAPTCHA_SECRET`. Keep `SMTP_PASSWORD`, `HCAPTCHA_SECRET`, and other secrets out of frontend code and repository files. `MAILEROO_FROM_EMAIL` should match the SMTP account email.
+Use the SMTP account email and password from Maileroo. Add the secret key from the hCaptcha dashboard as `HCAPTCHA_SECRET` (the handler also accepts `HCAPTCHA_SECRET_KEY` or `HCAPTCHA_PRIVATE_KEY` for compatibility). Keep `SMTP_PASSWORD`, hCaptcha secrets, and other secrets out of frontend code and repository files. `MAILEROO_FROM_EMAIL` should match the SMTP account email.
 
 After saving the variables:
 

@@ -24,7 +24,12 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'Please complete the captcha before sending your message.' });
     }
 
-    const captchaSecret = process.env.HCAPTCHA_SECRET;
+    const captchaSecret = (
+        process.env.HCAPTCHA_SECRET
+        || process.env.HCAPTCHA_SECRET_KEY
+        || process.env.HCAPTCHA_PRIVATE_KEY
+        || ''
+    ).trim();
     if (!captchaSecret) {
         console.error('hCaptcha verification is not configured.');
         return res.status(500).json({ error: 'Captcha verification is not configured.' });
