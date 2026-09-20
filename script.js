@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTyping();
     initCertificationCount();
     initStatsCounter();
+    initCursor();
     initCLIModal();
     initPDFModal();
     initForm();
@@ -806,12 +807,12 @@ function initSkills() {
 function initCursor() {
     const cursor = document.querySelector('.custom-cursor');
     const follower = document.querySelector('.cursor-follower');
-    if (!cursor || !follower) return;
+    if (!cursor || !follower || !window.matchMedia('(pointer: fine)').matches
+        || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let posX = 0, posY = 0;
     let mouseX = 0, mouseY = 0;
     let initialized = false;
-    let followerFrame = null;
 
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
@@ -822,6 +823,8 @@ function initCursor() {
         if (!initialized) {
             cursor.style.opacity = '1';
             follower.style.opacity = '1';
+            posX = mouseX;
+            posY = mouseY;
             initialized = true;
         }
     });
@@ -831,43 +834,19 @@ function initCursor() {
         posY += (mouseY - posY) * 0.15;
         follower.style.left = `${posX}px`;
         follower.style.top = `${posY}px`;
-        followerFrame = requestAnimationFrame(animateFollower);
+        requestAnimationFrame(animateFollower);
     }
     animateFollower();
 
-    const interactables = document.querySelectorAll('a, button, .skill-tab, .project-card, .pillar-card, .cert-card, input, textarea, .skill-cat-btn');
+    const interactables = document.querySelectorAll('a, button, .project-card, .pillar-card, .cert-card, input, textarea, .skill-cat-btn, select');
     interactables.forEach(el => {
         el.addEventListener('mouseenter', () => {
-            cursor.style.width = '14px';
-            cursor.style.height = '14px';
-            cursor.style.backgroundColor = '#0077ff';
-            follower.style.width = '55px';
-            follower.style.height = '55px';
-            follower.style.borderColor = 'rgba(0, 119, 255, 0.6)';
+            document.body.classList.add('cursor-hover');
         });
         el.addEventListener('mouseleave', () => {
-            cursor.style.width = '8px';
-            cursor.style.height = '8px';
-            cursor.style.backgroundColor = '#00d2ff';
-            follower.style.width = '36px';
-            follower.style.height = '36px';
-            follower.style.borderColor = 'rgba(0, 210, 255, 0.4)';
+            document.body.classList.remove('cursor-hover');
         });
     });
-
-    const skillsSection = document.querySelector('.skills-section');
-    if (skillsSection) {
-        skillsSection.addEventListener('mouseenter', () => {
-            follower.style.width = '55px';
-            follower.style.height = '55px';
-            follower.style.borderColor = 'rgba(0, 119, 255, 0.6)';
-        }, true);
-        skillsSection.addEventListener('mouseleave', () => {
-            follower.style.width = '36px';
-            follower.style.height = '36px';
-            follower.style.borderColor = 'rgba(0, 210, 255, 0.4)';
-        }, true);
-    }
 }
 
 function initMobileNav() {
