@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     initCanvas();
     initTyping();
+    initCertificationCount();
     initStatsCounter();
     initCLIModal();
     initPDFModal();
@@ -15,6 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortalTooltips();
     initGitHubContributions();
 });
+
+function initCertificationCount() {
+    const certificationCount = document.querySelectorAll('.cert-card[data-cert-title]').length;
+    document.querySelectorAll('.hud-certification-count').forEach((element) => {
+        element.textContent = String(certificationCount);
+    });
+    document.querySelectorAll('.certification-stat-number').forEach((element) => {
+        element.setAttribute('data-target', String(certificationCount));
+    });
+}
 
 function initThemeToggle() {
     const toggleBtn = document.getElementById('theme-toggle');

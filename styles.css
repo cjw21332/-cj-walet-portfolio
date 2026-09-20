@@ -414,8 +414,8 @@ main {
 .hero-section {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 3.5rem;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    gap: clamp(2rem, 5vw, 3.5rem);
     align-items: center;
     padding-top: 6.5rem;
 }
@@ -424,6 +424,10 @@ main {
 .hero-interactive-card {
     min-width: 0;
     max-width: 100%;
+}
+
+.hero-interactive-card {
+    width: 100%;
 }
 
 .profile-header-group {
@@ -678,6 +682,12 @@ main {
     font-family: var(--font-mono);
     font-size: 0.85rem;
     border: 1px solid var(--border-card);
+}
+
+.code-snippet-box pre {
+    max-width: 100%;
+    margin: 0;
+    overflow-x: auto;
 }
 
 .kwd { color: #38bdf8; font-weight: 600; }
@@ -2359,6 +2369,19 @@ a.contact-chip:hover {
     .navbar {
         padding: 0.9rem 1.5rem;
     }
+
+    @media (max-width: 1100px) {
+        .hero-section {
+            grid-template-columns: minmax(0, 1fr);
+            align-items: start;
+        }
+
+        .hero-content,
+        .hero-interactive-card {
+            width: min(100%, 760px);
+            justify-self: center;
+        }
+    }
     .nav-links {
         display: none;
     }
@@ -2828,6 +2851,14 @@ img, iframe, canvas, svg, video {
         font-size: 1rem;
     }
 
+    .hero-interactive-card {
+        width: 100%;
+    }
+
+    .card-header {
+        flex-wrap: wrap;
+    }
+
     .section-header {
         gap: 0.65rem;
         margin-bottom: 2.5rem;
@@ -2961,8 +2992,12 @@ img, iframe, canvas, svg, video {
     }
 
     .code-snippet-box {
-        overflow-x: auto;
         font-size: 0.7rem;
+    }
+
+    .code-snippet-box pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
     }
 
     .cert-category-header {
