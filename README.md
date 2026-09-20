@@ -137,10 +137,11 @@ SMTP_PORT=465
 SMTP_USERNAME=your_maileroo_smtp_username
 SMTP_PASSWORD=your_maileroo_smtp_password
 MAILEROO_FROM_EMAIL=your_maileroo_smtp_username
+HCAPTCHA_SECRET=your_hcaptcha_secret
 GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 ```
 
-Do not commit API keys, SMTP passwords, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.
+The contact form uses hCaptcha before the serverless handler sends email. Add the hCaptcha secret as `HCAPTCHA_SECRET`; the public site key is intentionally embedded in the form because it is safe to expose in browser code. Do not commit API keys, SMTP passwords, hCaptcha secrets, or other credentials to source control. Client-visible configuration should contain only values that are safe to expose publicly.
 
 `GITHUB_TOKEN` is used by the serverless contribution route when available so private contributions can be aggregated without exposing a token in the browser. If it is not configured, the route falls back to the public contribution calendar and public repositories APIs, so the calendar, repository count, and primary languages still render. The GitHub section uses a fixed Sep 1, 2025–Sep 19, 2026 range and loads once without advancing the date.
 

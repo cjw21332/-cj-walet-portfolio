@@ -112,10 +112,11 @@ SMTP_PORT=465
 SMTP_USERNAME=your_maileroo_smtp_username
 SMTP_PASSWORD=your_maileroo_smtp_password
 MAILEROO_FROM_EMAIL=your_maileroo_smtp_username
+HCAPTCHA_SECRET=your_hcaptcha_secret
 GITHUB_TOKEN=github_personal_access_token_with_read_user_scope
 ```
 
-Use the SMTP account email and password from Maileroo. Keep `SMTP_PASSWORD` secret and never place it in frontend code or repository files. `MAILEROO_FROM_EMAIL` should match the SMTP account email.
+Use the SMTP account email and password from Maileroo. Add the secret key from the hCaptcha dashboard as `HCAPTCHA_SECRET`. Keep `SMTP_PASSWORD`, `HCAPTCHA_SECRET`, and other secrets out of frontend code and repository files. `MAILEROO_FROM_EMAIL` should match the SMTP account email.
 
 After saving the variables:
 
@@ -134,10 +135,12 @@ Test the deployed URL:
 5. Confirm that CJ receives the notification email.
 6. Confirm that the visitor receives the automatic acknowledgement.
 
+The form must also pass the hCaptcha checkbox before submission. If hCaptcha is not configured in the deployment environment, the endpoint returns a configuration error instead of sending mail.
+
 If the form shows **Unable to Send**:
 
 1. Open the Vercel deployment logs.
-2. Check that `SMTP_USERNAME`, `SMTP_PASSWORD`, and `MAILEROO_FROM_EMAIL` are present in the deployment environment.
+2. Check that `SMTP_USERNAME`, `SMTP_PASSWORD`, `MAILEROO_FROM_EMAIL`, and `HCAPTCHA_SECRET` are present in the deployment environment.
 3. Confirm the SMTP account is active in Maileroo.
 4. Confirm `MAILEROO_FROM_EMAIL` matches the SMTP account email.
 5. Redeploy after changing environment variables.

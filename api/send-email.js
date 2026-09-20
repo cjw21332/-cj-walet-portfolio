@@ -15,9 +15,38 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { name, email, message } = req.body || {};
+    const { name, email, message, captchaToken } = req.body || {};
     if (!name || !email || !message) {
         return res.status(400).json({ error: 'Name, Email, and Message are required.' });
+    }
+
+    if (!captchaToken) {
+        return res.status(400).json({ error: 'Please complete the captcha before sending your message.' });
+    }
+
+    const captchaSecret = process.env.HCAPTCHA_SECRET;
+    if (!captchaSecret) {
+        console.error('hCaptcha verification is not configured.');
+        return res.status(500).json({ error: 'Captcha verification is not configured.' });
+    }
+
+    try {
+        const captchaResponse = await fetch('https://api.hcaptcha.com/siteverify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                secret: captchaSecret,
+                response: captchaToken
+            })
+        });
+        const captchaResult = await captchaResponse.json();
+        if (!captchaResponse.ok || !captchaResult.success) {
+            console.warn('hCaptcha rejected contact form submission:', captchaResult['error-codes'] || 'unknown error');
+            return res.status(403).json({ error: 'Captcha verification failed. Please try again.' });
+        }
+    } catch (error) {
+        console.error('hCaptcha verification request failed:', error);
+        return res.status(502).json({ error: 'Captcha verification is temporarily unavailable.' });
     }
 
     const fromEmail = process.env.MAILEROO_FROM_EMAIL;

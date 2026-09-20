@@ -502,6 +502,7 @@ function initForm() {
         const nameVal = document.getElementById('name').value.trim();
         const emailVal = document.getElementById('email').value.trim();
         const msgVal = document.getElementById('message').value.trim();
+        const captchaResponse = form.querySelector('[name="h-captcha-response"]')?.value;
         const submitBtn = form.querySelector('button[type="submit"]');
 
         if (!nameVal || !emailVal || !msgVal) return;
@@ -509,6 +510,11 @@ function initForm() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(emailVal)) {
             alert('Please enter a valid email address.');
+            return;
+        }
+
+        if (!captchaResponse) {
+            alert('Please complete the captcha before sending your message.');
             return;
         }
 
@@ -521,7 +527,12 @@ function initForm() {
             const response = await fetch('/api/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: nameVal, email: emailVal, message: msgVal })
+                body: JSON.stringify({
+                    name: nameVal,
+                    email: emailVal,
+                    message: msgVal,
+                    captchaToken: captchaResponse
+                })
             });
 
             const result = await response.json().catch(() => ({}));
@@ -535,8 +546,10 @@ function initForm() {
             }
             form.reset();
             if (charCountEl) charCountEl.textContent = '0';
+            if (window.hcaptcha) window.hcaptcha.reset();
             openSuccessModal();
         } catch (err) {
+            if (window.hcaptcha) window.hcaptcha.reset();
             if (submitBtn) {
                 submitBtn.innerHTML = `<span>Unable to Send</span> <i class="fas fa-triangle-exclamation"></i>`;
             }
@@ -619,7 +632,7 @@ const skillCategories = [
             { name: "Vercel",   icon: `${SI}/vercel/ffffff`, lightBg: true },
             { name: "VS Code",  icon: VSC_SVG },
             { name: "Terminal", icon: `${SI}/gnubash/4eaa25` },
-            { name: "AWS Amplify", icon: `${SI}/awsamplify/ff9900` }
+            { name: "AWS Amplify", icon: "assets/aws-amplify.svg" }
         ]
     },
     {
