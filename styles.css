@@ -3102,7 +3102,23 @@ img, iframe, canvas, svg, video {
     html,
     body,
     body * {
-        cursor: none !important;
+        cursor: url("assets/cursor-dark.svg") 14 14, auto !important;
+    }
+}
+
+@media (pointer: fine) and (prefers-reduced-motion: reduce) {
+    html,
+    body,
+    body * {
+        cursor: url("assets/cursor-dark.svg") 14 14, auto !important;
+    }
+}
+
+@media (pointer: fine) {
+    [data-theme="light"],
+    [data-theme="light"] body,
+    [data-theme="light"] body * {
+        cursor: url("assets/cursor-light.svg") 14 14, auto !important;
     }
 }
 

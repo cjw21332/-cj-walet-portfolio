@@ -807,8 +807,7 @@ function initSkills() {
 function initCursor() {
     const cursor = document.querySelector('.custom-cursor');
     const follower = document.querySelector('.cursor-follower');
-    if (!cursor || !follower || !window.matchMedia('(pointer: fine)').matches
-        || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!cursor || !follower || !window.matchMedia('(pointer: fine)').matches) return;
 
     let posX = 0, posY = 0;
     let mouseX = 0, mouseY = 0;
