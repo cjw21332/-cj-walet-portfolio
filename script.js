@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTyping();
     initCertificationCount();
     initStatsCounter();
-    initCursor();
     initCLIModal();
     initPDFModal();
     initForm();
@@ -802,48 +801,6 @@ function initSkills() {
     }
 
     renderCategory('frontend');
-}
-
-function initCursor() {
-    const cursor = document.querySelector('.custom-cursor');
-    const follower = document.querySelector('.cursor-follower');
-    if (!cursor || !follower || !window.matchMedia('(pointer: fine)').matches) return;
-
-    let posX = 0, posY = 0;
-    let mouseX = 0, mouseY = 0;
-    let initialized = false;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-
-        if (!initialized) {
-            cursor.style.opacity = '1';
-            follower.style.opacity = '1';
-            posX = mouseX;
-            posY = mouseY;
-            initialized = true;
-        }
-    });
-
-    function animateFollower() {
-        posX += (mouseX - posX) * 0.12;
-        posY += (mouseY - posY) * 0.12;
-        follower.style.transform = `translate3d(${posX}px, ${posY}px, 0) translate(-50%, -50%)`;
-        requestAnimationFrame(animateFollower);
-    }
-    animateFollower();
-
-    const interactables = document.querySelectorAll('a, button, .project-card, .pillar-card, .cert-card, input, textarea, .skill-cat-btn, select');
-    interactables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            document.body.classList.add('cursor-hover');
-        });
-        el.addEventListener('mouseleave', () => {
-            document.body.classList.remove('cursor-hover');
-        });
-    });
 }
 
 function initMobileNav() {

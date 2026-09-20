@@ -3124,6 +3124,13 @@ img, iframe, canvas, svg, video {
     }
 }
 
+@media (pointer: fine) {
+    .custom-cursor,
+    .cursor-follower {
+        display: none;
+    }
+}
+
 @media (min-width: 1600px) {
     main {
         max-width: 1400px;
